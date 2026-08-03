@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { BrowserRouter, Link, NavLink, Route, Routes, useParams } from 'react-router-dom'
 import { allPlates, collections } from './data'
 const rise = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }
 const t = { duration: .8, ease: [0.16, 1, .3, 1] }
 
 function Shell({ children }) {
   const [open, setOpen] = useState(false)
-  const location = useLocation()
-  const reduce = useReducedMotion()
   return <main className="min-h-screen overflow-hidden bg-ink text-paper selection:bg-acid selection:text-ink">
     <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 mix-blend-difference md:px-10">
       <Link to="/" className="font-mono text-[11px] uppercase tracking-[.22em]">Mac Motz</Link>
@@ -16,7 +14,7 @@ function Shell({ children }) {
       <button className="font-mono text-[10px] uppercase tracking-[.18em] md:hidden" onClick={() => setOpen(!open)} aria-expanded={open}>Menu</button>
     </header>
     <AnimatePresence>{open && <motion.nav initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 grid place-content-center gap-7 bg-ink text-center font-display text-5xl" onClick={() => setOpen(false)}><Link to="/portfolio">Portfolio</Link><Link to="/about">About</Link><Link to="/contact">Contact</Link></motion.nav>}</AnimatePresence>
-    <AnimatePresence mode="wait"><motion.div key={location.pathname} initial={{ opacity: 0, y: reduce ? 0 : 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={reduce ? { duration: 0 } : { duration: .45 }}>{children}</motion.div></AnimatePresence>
+    {children}
   </main>
 }
 function Nav({ to, children }) { return <NavLink to={to} className={({isActive}) => `transition hover:text-acid ${isActive ? 'text-acid' : ''}`}>{children}</NavLink> }
