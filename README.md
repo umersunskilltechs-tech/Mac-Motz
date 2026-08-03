@@ -23,10 +23,14 @@ Use `npm run build` for a production verification/build.
 - React 19 + Vite
 - Tailwind CSS v4
 - Motion for React
-- React Router for the four-page experience
+- React Router browser routes for the four-page experience
 
 ## Content note
 
 The photographs currently use carefully selected Unsplash stand-ins. Replace their URLs in `src/App.jsx` with Mac’s supplied photography before launch, preserving meaningful alt text.
 
 The contact form has a polished client-side confirmation state, but must be connected to a form endpoint such as Formspree, Basin, or a custom server before launch.
+
+## VPS routing
+
+This project uses normal React Router URLs such as `/portfolio` and `/about`. Configure the VPS to return `index.html` for unknown paths; [nginx.conf.example](nginx.conf.example) includes the required `try_files` fallback. Without it, direct page refreshes will 404 even though in-app navigation works.

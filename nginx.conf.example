@@ -1,0 +1,12 @@
+# Replace /var/www/macmotz.com/dist with the deployment directory.
+# This fallback is required for React Router browser routes to survive refreshes.
+server {
+  listen 80;
+  server_name macmotz.com www.macmotz.com;
+  root /var/www/macmotz.com/dist;
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+}
