@@ -1,11 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Instrument+Sans:wdth,wght@100,400;100,500&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
 @import "tailwindcss";
 
-@theme { --color-ink: #12100d; --color-paper: #ede7da; --color-acid: #b5451f; --font-display: "Fraunces", Georgia, serif; --font-mono: "DM Mono", monospace; --font-sans: "Instrument Sans", sans-serif; }
-html { scroll-behavior: smooth; background: #12100d; }
-body { margin: 0; font-family: var(--font-sans); }
-* { box-sizing: border-box; }
-.filmstrip { scrollbar-width: none; -ms-overflow-style: none; }
-.filmstrip::-webkit-scrollbar { display: none; }
-main { background-image: radial-gradient(circle at 10% 20%, rgba(181, 69, 31, .08), transparent 34rem), radial-gradient(circle at 90% 75%, rgba(237, 231, 218, .045), transparent 28rem); }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+@theme {
+  --color-ink: #12100d;
+  --color-panel: #1b1815;
+  --color-paper: #ede7da;
+  --color-muted: #8f887a;
+  --color-accent: #b5451f;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono: "DM Mono", monospace;
+  --font-sans: "Instrument Sans", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-paper);
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Subtle film-grain overlay, fixed so it never adds scroll height or blocks input. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
