@@ -5,6 +5,7 @@
 html { scroll-behavior: smooth; background: #12100d; }
 body { margin: 0; font-family: var(--font-sans); }
 * { box-sizing: border-box; }
-.filmstrip { scrollbar-width: thin; scrollbar-color: #7a3117 transparent; }
+.filmstrip { scrollbar-width: none; -ms-overflow-style: none; }
+.filmstrip::-webkit-scrollbar { display: none; }
 main { background-image: radial-gradient(circle at 10% 20%, rgba(181, 69, 31, .08), transparent 34rem), radial-gradient(circle at 90% 75%, rgba(237, 231, 218, .045), transparent 28rem); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
