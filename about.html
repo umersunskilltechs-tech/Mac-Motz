@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — Mac Motz</title>
+  <meta name="description" content="Mac Motz is a documentary and fine-art photographer based between St. Louis and the road, working in long-form series about the American landscape." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body class="page-about">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">Mac Motz</a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul class="primary-nav__list" id="primary-nav-list" data-open="false">
+        <li><a class="primary-nav__link" href="index.html">Home</a></li>
+        <li><a class="primary-nav__link" href="portfolio.html">Portfolio</a></li>
+        <li><a class="primary-nav__link" href="about.html" aria-current="page">About</a></li>
+        <li><a class="primary-nav__link" href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-menu-toggle" aria-expanded="false" aria-controls="primary-nav-list" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="wrap about-layout">
+      <div class="about-copy" data-reveal>
+        <p class="eyebrow" style="margin-bottom: var(--space-4);">About</p>
+        <h1 class="hero__title" style="font-size: var(--text-3xl);">Mac Motz</h1>
+
+        <p style="margin-top: var(--space-6); font-size: var(--text-md); color: var(--color-fog-dim);">
+          Mac Motz is a documentary and fine-art photographer working in long-form series
+          about the American landscape — the highways, floodplains, and small towns
+          where cultivated land meets the wild edges people try to ignore.
+        </p>
+
+        <p>
+          Raised outside a farming county in the Midwest, Mac's first camera was a
+          hand-me-down Pentax K1000 and a summer with nothing else to do. What started
+          as a way to document a disappearing way of life became a decade-long practice:
+          six major series shot between 2015 and the present, each returned to over
+          months or years rather than finished in a single trip.
+        </p>
+
+        <blockquote class="pull-quote">
+          "I'm not trying to make the ordinary look extraordinary. I'm trying to slow
+          down long enough to notice it was already extraordinary."
+        </blockquote>
+
+        <h2>Approach</h2>
+        <p>
+          Mac shoots almost entirely on medium-format film, returning to the same
+          locations across seasons to let a place reveal itself rather than composing a
+          single decisive frame. Portraits are made only with the subject's participation
+          — nothing is taken without a conversation first.
+        </p>
+
+        <h2>Exhibitions &amp; recognition</h2>
+        <p>
+          Work from <em>Low Country</em> and <em>Vacancy</em> has shown in regional
+          gallery group exhibitions across the Midwest and South, and individual plates
+          are held in several private collections. Mac is not currently represented by a
+          gallery and handles print and licensing inquiries directly.
+        </p>
+
+        <div style="margin-top: var(--space-9);">
+          <a class="btn btn--solid" href="contact.html">Get in touch →</a>
+        </div>
+      </div>
+
+      <div class="about-portrait" data-reveal>
+        <figure class="plate" data-tone="dust" style="width: 100%; height: auto; aspect-ratio: 4 / 5;">
+          <img class="plate__img" src="https://picsum.photos/seed/macmotz-portrait/900/1125" alt="Portrait of Mac Motz on location." loading="lazy" decoding="async" onerror="this.remove()" />
+          <div class="plate__duotone" aria-hidden="true"></div>
+          <div class="plate__vignette" aria-hidden="true"></div>
+          <p class="plate__frame">PORTRAIT</p>
+        </figure>
+
+        <div class="spec-sheet" style="margin-top: var(--space-7);">
+          <div class="spec-sheet__row">
+            <span class="spec-sheet__key">Based</span>
+            <span>St. Louis, MO</span>
+          </div>
+          <div class="spec-sheet__row">
+            <span class="spec-sheet__key">Focus</span>
+            <span>Landscape, documentary, portraiture</span>
+          </div>
+          <div class="spec-sheet__row">
+            <span class="spec-sheet__key">Formats</span>
+            <span>Medium-format film, digital</span>
+          </div>
+          <div class="spec-sheet__row">
+            <span class="spec-sheet__key">Active since</span>
+            <span>2015</span>
+          </div>
+          <div class="spec-sheet__row">
+            <span class="spec-sheet__key">Availability</span>
+            <span>Prints, editorial, limited commissions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p class="frame-tag">© <span id="year"></span> Mac Motz</p>
+    <p class="frame-tag">All work protected. Prints and licensing available on request.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script type="module" src="js/about.js"></script>
+</body>
+</html>

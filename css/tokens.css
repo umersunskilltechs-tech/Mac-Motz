@@ -1,0 +1,142 @@
+/*
+  tokens.css — Mac Motz design tokens
+  Every value used by layout.css / components.css / animations.css must come from here.
+  See CLAUDE.md rule 1 for the (very short) list of exceptions.
+
+  Breakpoints (cannot be CSS vars — @media can't consume custom properties):
+    --bp-sm: 480px   (large phone)
+    --bp-md: 768px   (tablet)
+    --bp-lg: 1024px  (small desktop)
+    --bp-xl: 1440px  (large desktop)
+*/
+
+:root {
+  /* ---------- Color ---------- */
+  --color-void: #12100d;            /* base background */
+  --color-void-raised: #1b1815;     /* panels, cards, raised sections */
+  --color-void-deep: #0a0908;       /* deepest recess — hero edges, overlays */
+  --color-fog: #ede7da;             /* primary ink on dark */
+  --color-fog-dim: #cfc8b8;         /* secondary ink, slightly muted */
+  --color-ash: #8f887a;             /* tertiary ink, labels, captions */
+  --color-ash-dim: #635d52;         /* quaternary ink, disabled/hairline text */
+  --color-signal: #b5451f;          /* darkroom safelight — accent */
+  --color-signal-bright: #d8622f;   /* accent hover/active */
+  --color-signal-dim: #7a3117;      /* accent pressed / deep */
+  --color-line: rgba(237, 231, 218, 0.14);
+  --color-line-strong: rgba(237, 231, 218, 0.28);
+  --color-overlay: rgba(10, 9, 8, 0.72);
+  --color-focus-ring: #d8622f;
+
+  /* Plate placeholder duotone pairs (used only until real photography is dropped in) */
+  --tone-rust-a: #3a241a;
+  --tone-rust-b: #b5451f;
+  --tone-moss-a: #1f2620;
+  --tone-moss-b: #5c7a5e;
+  --tone-slate-a: #1b2228;
+  --tone-slate-b: #4f6577;
+  --tone-clay-a: #2b201c;
+  --tone-clay-b: #9c6a4a;
+  --tone-dust-a: #26221c;
+  --tone-dust-b: #8a7a5c;
+  --tone-ink-a: #17191c;
+  --tone-ink-b: #5a6169;
+
+  /* ---------- Type families ---------- */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
+  --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* ---------- Type scale (fluid) ---------- */
+  --text-2xs: 0.6875rem;                                   /* 11px */
+  --text-xs: 0.75rem;                                      /* 12px */
+  --text-sm: 0.875rem;                                     /* 14px */
+  --text-base: 1rem;                                       /* 16px */
+  --text-md: 1.125rem;                                     /* 18px */
+  --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --text-2xl: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+  --text-3xl: clamp(2.75rem, 1.9rem + 3.4vw, 4.25rem);
+  --text-display: clamp(3.5rem, 2rem + 7vw, 8.5rem);
+  --text-display-sm: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+
+  --leading-tight: 1.02;
+  --leading-snug: 1.2;
+  --leading-normal: 1.5;
+  --leading-loose: 1.75;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-wider: 0.14em;
+  --tracking-widest: 0.28em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+
+  /* ---------- Space scale (4px base) ---------- */
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4  */
+  --space-2: 0.5rem;    /* 8  */
+  --space-3: 0.75rem;   /* 12 */
+  --space-4: 1rem;      /* 16 */
+  --space-5: 1.5rem;    /* 24 */
+  --space-6: 2rem;      /* 32 */
+  --space-7: 2.5rem;    /* 40 */
+  --space-8: 3rem;      /* 48 */
+  --space-9: 4rem;      /* 64 */
+  --space-10: 5rem;     /* 80 */
+  --space-11: 6.5rem;   /* 104 */
+  --space-12: 8rem;     /* 128 */
+  --space-13: 10rem;    /* 160 */
+
+  --gutter: clamp(1.25rem, 1rem + 1.6vw, 3rem);
+  --content-max: 90rem; /* 1440px */
+  --measure: 38rem;     /* comfortable reading column */
+
+  /* ---------- Radius ---------- */
+  --radius-0: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-full: 999px;
+
+  /* ---------- Border ---------- */
+  --border-hair: 1px solid var(--color-line);
+  --border-hair-strong: 1px solid var(--color-line-strong);
+
+  /* ---------- Shadow ---------- */
+  --shadow-plate: 0 1.5rem 3rem -1.5rem rgba(0, 0, 0, 0.6);
+  --shadow-panel: 0 1px 0 var(--color-line);
+  --shadow-focus: 0 0 0 3px rgba(216, 98, 47, 0.35);
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-signal: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --duration-instant: 100ms;
+  --duration-fast: 200ms;
+  --duration-base: 400ms;
+  --duration-slow: 700ms;
+  --duration-slower: 1100ms;
+
+  /* ---------- Z-index ---------- */
+  --z-base: 0;
+  --z-grain: 5;
+  --z-plate: 10;
+  --z-nav: 50;
+  --z-index-rail: 45;
+  --z-cursor: 90;
+  --z-lightbox: 100;
+  --z-overlay: 95;
+
+  /* ---------- Cursor ---------- */
+  --cursor-size: 2.5rem;
+  --cursor-size-active: 4.5rem;
+
+  /* ---------- Filmstrip ---------- */
+  --plate-w: clamp(15rem, 12rem + 12vw, 26rem);
+  --plate-h: clamp(19rem, 15rem + 15vw, 33rem);
+  --plate-gap: var(--space-5);
+  --sprocket-size: 0.5rem;
+}

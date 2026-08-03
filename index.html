@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mac Motz — Photography</title>
+  <meta name="description" content="Mac Motz is a documentary and fine-art photographer working in long-form series about the American landscape, interiors, and the people who stay." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body class="page-home">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">Mac Motz</a>
+    <nav class="primary-nav" aria-label="Primary">
+      <ul class="primary-nav__list" id="primary-nav-list" data-open="false">
+        <li><a class="primary-nav__link" href="index.html" aria-current="page">Home</a></li>
+        <li><a class="primary-nav__link" href="portfolio.html">Portfolio</a></li>
+        <li><a class="primary-nav__link" href="about.html">About</a></li>
+        <li><a class="primary-nav__link" href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-menu-toggle" aria-expanded="false" aria-controls="primary-nav-list" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <aside class="index-rail" aria-label="Jump to collection">
+    <ul id="index-rail-list"></ul>
+  </aside>
+
+  <div class="frame-counter" aria-hidden="true">
+    <span class="frame-counter__value mono"><b>F001</b> / F000</span>
+  </div>
+
+  <main id="main">
+    <section class="hero wrap">
+      <p class="eyebrow" data-reveal>Documentary &amp; fine-art photography</p>
+      <h1 class="hero__title" data-reveal>Mac Motz makes <em>quiet</em> pictures of loud places.</h1>
+      <div class="hero__meta" data-reveal>
+        <p class="hero__tagline">
+          Six long-form series shot across ten years — American interstates, coastal
+          winters, and the interiors people leave behind. Scroll to move through the
+          contact sheets, or jump straight to a series from the index at left.
+        </p>
+        <div class="scroll-cue eyebrow">
+          <span class="scroll-cue__line" aria-hidden="true"></span>
+          Scroll
+        </div>
+      </div>
+    </section>
+
+    <div id="reels"></div>
+
+    <section class="closing-strip wrap">
+      <div class="closing-strip__grid">
+        <div class="text-card" data-reveal>
+          <p class="eyebrow" style="margin-bottom: var(--space-3);">About</p>
+          <h3 class="text-card__title">Based between St. Louis and the road.</h3>
+          <p class="text-card__body">
+            Mac has spent the last decade photographing the edges of American places —
+            where highways, floodplains, and small towns meet. Prints are held in several
+            private collections; commissions are considered on a limited basis.
+          </p>
+          <a class="btn link-underline" href="about.html">Read the full bio →</a>
+        </div>
+        <div class="text-card" data-reveal>
+          <p class="eyebrow" style="margin-bottom: var(--space-3);">Inquiries</p>
+          <h3 class="text-card__title">Editorial, print, and commission requests.</h3>
+          <p class="text-card__body">
+            For assignment work, print sales, or licensing, get in touch directly — Mac
+            replies to every inquiry personally, usually within a few days.
+          </p>
+          <a class="btn btn--solid" href="contact.html">Start an inquiry →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p class="frame-tag">© <span id="year"></span> Mac Motz</p>
+    <p class="frame-tag">All work protected. Prints and licensing available on request.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js" defer></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script type="module" src="js/home.js"></script>
+</body>
+</html>
