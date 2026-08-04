@@ -12,45 +12,52 @@ export default function GrainField() {
 
     let motes = []
     let frame = null
+    let width = 0
+    let height = 0
+    let seededWidth = 0
     const pointer = { targetX: 0, targetY: 0, x: 0, y: 0 }
 
     function seed() {
-      const { innerWidth: w, innerHeight: h } = window
-      const count = Math.min(150, Math.round((w * h) / 24000))
+      const count = Math.min(300, Math.round((width * height) / 9000))
       motes = Array.from({ length: count }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        radius: Math.random() * 1.5 + 0.35,
-        rise: Math.random() * 0.16 + 0.03,
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.2 + 0.5,
+        rise: Math.random() * 0.18 + 0.04,
         sway: Math.random() * Math.PI * 2,
         swaySpeed: Math.random() * 0.006 + 0.002,
         depth: Math.random() * 0.85 + 0.15,
-        alpha: Math.random() * 0.3 + 0.1,
+        alpha: Math.random() * 0.4 + 0.22,
       }))
     }
 
-    let seededWidth = 0
-
     function resize() {
+      // Measure the element, never window.innerWidth, and never write an
+      // explicit CSS width back. The canvas is `fixed inset-0`, so CSS already
+      // sizes it; setting a pixel width made the layout wider than the screen,
+      // which triggered mobile shrink-to-fit and oscillated the viewport.
+      const rect = canvas.getBoundingClientRect()
+      width = Math.round(rect.width)
+      height = Math.round(rect.height)
+      if (!width || !height) return
+
       const ratio = Math.min(window.devicePixelRatio || 1, 2)
-      canvas.width = window.innerWidth * ratio
-      canvas.height = window.innerHeight * ratio
-      canvas.style.width = `${window.innerWidth}px`
-      canvas.style.height = `${window.innerHeight}px`
+      canvas.width = width * ratio
+      canvas.height = height * ratio
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
+
       // Mobile browsers fire resize every time the address bar hides. Re-seeding
       // on those would visibly jolt the whole field, so only reseed on a real
       // width change (rotation, desktop window drag).
-      if (Math.abs(window.innerWidth - seededWidth) > 80) {
-        seededWidth = window.innerWidth
+      if (Math.abs(width - seededWidth) > 80) {
+        seededWidth = width
         seed()
       }
-      if (reduce) draw(0)
+      if (reduce) draw()
     }
 
-    function draw(time) {
-      const { innerWidth: w, innerHeight: h } = window
-      ctx.clearRect(0, 0, w, h)
+    function draw() {
+      ctx.clearRect(0, 0, width, height)
       pointer.x += (pointer.targetX - pointer.x) * 0.05
       pointer.y += (pointer.targetY - pointer.y) * 0.05
 
@@ -58,8 +65,8 @@ export default function GrainField() {
         mote.y -= mote.rise
         mote.sway += mote.swaySpeed
         if (mote.y < -8) {
-          mote.y = h + 8
-          mote.x = Math.random() * w
+          mote.y = height + 8
+          mote.x = Math.random() * width
         }
 
         const x = mote.x + Math.sin(mote.sway) * 9 + pointer.x * mote.depth
@@ -69,7 +76,7 @@ export default function GrainField() {
 
         ctx.beginPath()
         ctx.arc(x, y, mote.radius, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(58, 50, 38, ${mote.alpha * twinkle})`
+        ctx.fillStyle = `rgba(42, 35, 25, ${mote.alpha * twinkle})`
         ctx.fill()
       }
 
@@ -77,8 +84,8 @@ export default function GrainField() {
     }
 
     function onPointerMove(event) {
-      pointer.targetX = (event.clientX / window.innerWidth - 0.5) * 26
-      pointer.targetY = (event.clientY / window.innerHeight - 0.5) * 26
+      pointer.targetX = (event.clientX / (width || 1) - 0.5) * 26
+      pointer.targetY = (event.clientY / (height || 1) - 0.5) * 26
     }
 
     resize()
@@ -95,5 +102,5 @@ export default function GrainField() {
     }
   }, [])
 
-  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10" />
+  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 h-full w-full" />
 }

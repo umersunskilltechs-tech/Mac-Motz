@@ -19,7 +19,8 @@ npm run preview
 
 ## Routes
 
-- `/` — Home. The masthead, a numbered archive index, then every collection in full as one repeating block.
+- `/` — Home. The masthead, then every collection in full as one repeating block, with a fixed archive index
+  tracking your position down the right edge.
 - `/portfolio` — every frame as a single contact sheet, filterable by collection, with a lightbox.
 - `/portfolio/:series` — one collection on its own page (`:series` is the collection id, e.g. `kin`).
 - `/about` — biography, statement, exhibitions and press.
@@ -36,8 +37,9 @@ src/
   motion.js       shared easing and fade variants
   App.jsx         routes and app shell
   styles.css      theme tokens, background layers, cursor rules
-  components/     CollectionBlock, LeadSlider, ContactSheet, IndexList, Masthead,
-                  Lightbox, GrainField, Cursor, Preloader, Header, Footer, Eyebrow
+  components/     CollectionBlock, LeadSlider, ContactSheet, ArchiveRail, Masthead,
+                  Typewriter, Reveal, Lightbox, GrainField, Cursor, Preloader,
+                  Header, Footer, Eyebrow
   pages/          Home, Portfolio, Series, About, Contact
 public/images/    real photography goes here
 ```

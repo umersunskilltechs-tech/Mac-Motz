@@ -37,14 +37,14 @@ export default function Lightbox({ frames, startId, onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: reduce ? 0 : 0.25 }}
-      className="fixed inset-0 z-70 flex flex-col bg-ink/96 text-paper backdrop-blur-sm"
+      className="fixed inset-0 z-70 flex flex-col bg-page/97 text-ink backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label={`${active.collection.title} image viewer`}
       onClick={onClose}
     >
       <div
-        className="flex items-center justify-between gap-4 px-5 py-5 font-mono text-[10px] uppercase tracking-[.15em] text-muted md:px-10"
+        className="flex items-center justify-between gap-4 px-5 py-5 font-mono text-[10px] uppercase tracking-[.15em] text-sub md:px-10"
         onClick={stop}
       >
         <span>
@@ -58,7 +58,7 @@ export default function Lightbox({ frames, startId, onClose }) {
           type="button"
           onClick={onClose}
           aria-label="Close image viewer"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-paper/25 transition hover:border-paper hover:bg-paper hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/25 transition hover:border-ink hover:bg-ink hover:text-page focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
             <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
@@ -98,7 +98,7 @@ export default function Lightbox({ frames, startId, onClose }) {
         </button>
       </div>
 
-      <p className="px-5 pb-8 text-center text-sm text-paper/70 md:px-10" onClick={stop}>
+      <p className="px-5 pb-8 text-center text-sm text-ink/70 md:px-10" onClick={stop}>
         {active.alt}
       </p>
     </motion.div>

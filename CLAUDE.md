@@ -19,8 +19,11 @@ npm run build
 content section on the homepage. Order is fixed:
 
 ```
-Masthead -> IndexList -> CollectionBlock x N -> about strip -> Footer
+Masthead -> CollectionBlock x N -> about strip -> Footer
 ```
+
+`ArchiveRail` floats over that, fixed to the right edge: the numbered index, collapsed to numbers, expanding on
+hover, tracking the block crossing the middle of the viewport. It is not part of the page flow.
 
 This site was rebuilt specifically to delete a pile of one-off homepage sections (marquee, stats band, tabs,
 coverflow, field notes, scroll hero). **Do not add new homepage section types.** New ideas go inside
@@ -33,14 +36,22 @@ ulyssesdesanti.com (four nav items, email as nav), anthonytuccitto.com (restrain
 
 1. **Page colour lives on `html` only.** An opaque background on `body` or `<main>` paints over the negative
    z-index layers and the animated background vanishes with no error.
-2. **Layer order:** GrainField `-z-10` · dot grid `-2` · mobile nav `z-40` · Header `z-50` · Lightbox `z-70` ·
-   Preloader `z-100` · film grain `999` · Cursor `z-1000`.
+2. **Layer order:** GrainField `-z-10` · dot grid `-2` · mobile nav and ArchiveRail `z-40` · Header `z-50` ·
+   Lightbox `z-70` · Preloader `z-100` · film grain `999` · Cursor `z-1000`.
 3. **The preloader never waits on the network.** Fixed ~1.6s timer. The homepage carries the whole archive; a
    load-gated preloader would hang.
 4. **Everything respects `prefers-reduced-motion`.** GrainField draws one static frame, Cursor does not mount,
    LeadSlider stops auto-advancing.
 5. **The custom cursor is `(pointer: fine)` only**, and so is the `cursor: none` rule. Text inputs keep a caret.
 6. **No scroll-jacking.** No wheel capture, no pinning.
+7. **`Typewriter` keeps the full string in the DOM** (invisible, for layout) and overlays the typed characters.
+   Remove that and every heading reflows the page as it types. Its caret renders only while in view and typing.
+
+## Text animation
+
+Two components, used everywhere — do not hand-roll a third. `Typewriter` for display headings (pass plain
+`text`, include `block` in the class list). `Reveal` for everything else: body copy, metadata, list rows, form
+fields. Both no-op under reduced motion.
 
 ## Content
 

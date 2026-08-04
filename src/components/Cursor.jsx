@@ -3,9 +3,9 @@ import { motion, useMotionValue, useSpring } from 'motion/react'
 
 const SPRING = { stiffness: 380, damping: 32, mass: 0.5 }
 
-// Editorial two-part cursor: a hard dot that tracks exactly, and a ring that
-// trails behind and swells over anything interactive. Rendered in difference
-// blend so it stays legible on the pale page and on top of dark photographs.
+// Camera-viewfinder cursor: a focus box of four corner brackets that trails the
+// pointer, plus a hard centre mark that tracks exactly. Rendered in difference
+// blend so it stays legible on the pale page and over dark photographs.
 export default function Cursor() {
   const [enabled, setEnabled] = useState(false)
   const [visible, setVisible] = useState(false)
@@ -13,8 +13,8 @@ export default function Cursor() {
 
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
-  const ringX = useSpring(x, SPRING)
-  const ringY = useSpring(y, SPRING)
+  const boxX = useSpring(x, SPRING)
+  const boxY = useSpring(y, SPRING)
 
   useEffect(() => {
     // Pointer-driven only: never render for touch, stylus, or reduced motion.
@@ -52,7 +52,8 @@ export default function Cursor() {
   if (!enabled) return null
 
   const showCursor = visible && mode !== 'text'
-  const ringScale = mode === 'view' ? 2.6 : mode === 'link' ? 1.7 : 1
+  const boxScale = mode === 'view' ? 1.9 : mode === 'link' ? 1.35 : 1
+  const corner = 'absolute h-2.5 w-2.5 border-white/80'
 
   return (
     <div
@@ -60,33 +61,32 @@ export default function Cursor() {
       className="pointer-events-none fixed inset-0 z-1000 mix-blend-difference"
       style={{ opacity: showCursor ? 1 : 0, transition: 'opacity 200ms ease' }}
     >
-      <motion.div
-        style={{ x: ringX, y: ringY }}
-        className="absolute left-0 top-0 will-change-transform"
-      >
+      <motion.div style={{ x: boxX, y: boxY }} className="absolute left-0 top-0 will-change-transform">
         <motion.div
-          animate={{ scale: ringScale }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/70"
+          animate={{ scale: boxScale }}
+          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          className="relative h-10 w-10 -translate-x-1/2 -translate-y-1/2"
         >
-          <motion.span
-            animate={{ opacity: mode === 'view' ? 1 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="font-mono text-[5px] uppercase tracking-[.2em] text-white"
-          >
-            View
-          </motion.span>
+          <span className={`${corner} left-0 top-0 border-l border-t`} />
+          <span className={`${corner} right-0 top-0 border-r border-t`} />
+          <span className={`${corner} bottom-0 left-0 border-b border-l`} />
+          <span className={`${corner} bottom-0 right-0 border-b border-r`} />
         </motion.div>
+
+        <motion.span
+          animate={{ opacity: mode === 'view' ? 1 : 0, y: mode === 'view' ? 0 : -4 }}
+          transition={{ duration: 0.22 }}
+          className="absolute left-0 top-7 -translate-x-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-[.28em] text-white"
+        >
+          View
+        </motion.span>
       </motion.div>
 
-      <motion.div
-        style={{ x, y }}
-        className="absolute left-0 top-0 will-change-transform"
-      >
+      <motion.div style={{ x, y }} className="absolute left-0 top-0 will-change-transform">
         <motion.div
           animate={{ scale: mode === 'default' ? 1 : 0 }}
           transition={{ duration: 0.25 }}
-          className="h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
+          className="h-1 w-1 -translate-x-1/2 -translate-y-1/2 bg-white"
         />
       </motion.div>
     </div>

@@ -142,4 +142,3 @@ export const framesByCollection = Object.fromEntries(
   ]),
 )
 
-export const totalFrameCount = allFrames.length

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import Reveal from './Reveal'
 
 const ADVANCE_MS = 4200
 
@@ -49,8 +50,14 @@ export default function LeadSlider({ frames, onOpen }) {
         </AnimatePresence>
       </button>
 
-      <div className="mt-3 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[.18em] text-sub">
-        <figcaption className="truncate">
+      <Reveal
+        delay={0.12}
+        className="mt-3 flex items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[.18em] text-sub"
+      >
+        {/* min-w-0 is load-bearing: `truncate` sets white-space:nowrap, so without
+            it this caption's min-content width is the whole string and it forces
+            the entire page grid wider than the screen. */}
+        <figcaption className="min-w-0 truncate">
           {active.frame} &mdash; {active.alt}
         </figcaption>
         <div className="flex shrink-0 items-center gap-3">
@@ -74,7 +81,7 @@ export default function LeadSlider({ frames, onOpen }) {
             &rarr;
           </button>
         </div>
-      </div>
+      </Reveal>
     </figure>
   )
 }

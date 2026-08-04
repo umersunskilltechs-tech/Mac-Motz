@@ -29,8 +29,11 @@ field notes, scroll hero). It was rebuilt specifically to remove them.
 `CollectionBlock`, so it appears for every collection. The homepage order is fixed:
 
 ```
-Masthead  ->  IndexList  ->  CollectionBlock x N  ->  about strip  ->  Footer
+Masthead  ->  CollectionBlock x N  ->  about strip  ->  Footer
 ```
+
+`ArchiveRail` floats over that, fixed to the right edge — the numbered index, collapsed to numbers and
+expanding on hover, tracking whichever block is crossing the middle of the viewport. It is not part of the flow.
 
 ## Architecture
 
@@ -44,15 +47,17 @@ src/
     CollectionBlock.jsx    THE repeated section (sticky title col + LeadSlider + ContactSheet + meta strip)
     LeadSlider.jsx         auto-crossfading lead slideshow inside a block
     ContactSheet.jsx       captioned grid of every frame in a collection
-    IndexList.jsx          numbered archive index; jump-nav + hover preview strip
+    ArchiveRail.jsx        fixed right-edge index with scroll-spy; desktop only
     Masthead.jsx           homepage title block
-    Lightbox.jsx           full-screen viewer (dark), keyboard + counter + scroll lock
+    Typewriter.jsx         types a heading out when it scrolls into view
+    Reveal.jsx             fades body copy and metadata up on scroll
+    Lightbox.jsx           full-screen viewer, keyboard + counter + scroll lock
     GrainField.jsx         fixed canvas of drifting dust motes
-    Cursor.jsx             two-part custom cursor (dot + trailing ring)
+    Cursor.jsx             camera-viewfinder cursor (corner brackets + centre mark)
     Preloader.jsx          intro curtain. Timing is fixed; see below.
     Header.jsx Footer.jsx Eyebrow.jsx
   pages/
-    Home.jsx        Masthead + IndexList + CollectionBlock per collection + about strip
+    Home.jsx        Masthead + CollectionBlock per collection + about strip
     Portfolio.jsx   every frame as one filterable contact sheet
     Series.jsx      /portfolio/:series — one CollectionBlock, standalone
     About.jsx  Contact.jsx
@@ -78,7 +83,7 @@ Break any of these and the site degrades silently — no error, no failed build.
    |---|---|
    | `GrainField` canvas | `-z-10` |
    | dot grid (`body::after`) | `-2` |
-   | mobile nav | `z-40` |
+   | mobile nav, `ArchiveRail` | `z-40` |
    | `Header` | `z-50` |
    | `Lightbox` | `z-70` |
    | `Preloader` | `z-100` |
@@ -96,6 +101,29 @@ Break any of these and the site degrades silently — no error, no failed build.
    `cursor: none` CSS is behind the same media query. Text inputs keep their caret.
 
 6. **No scroll-jacking.** No wheel capture, no scroll-driven pinning. Normal page scroll always works.
+
+7. **Grid and flex items need `min-w-0` wherever a `truncate` lives inside them.** Grid/flex items default to
+   `min-width: auto`, so they refuse to shrink below their content's min-content width — and `truncate` sets
+   `white-space: nowrap`, making that the full untruncated string. This silently widened the entire homepage
+   past the screen and made mobile Chrome zoom the whole page out. It never shows as "horizontal overflow",
+   because the browser expands the viewport to fit. Test at 390px with `mobile: false` to see the real value.
+
+8. **`Typewriter` must keep the full string in the DOM.** It renders the whole text invisibly for layout and
+   overlays the typed characters absolutely. Without that, every heading reflows the page as it grows. The caret
+   only renders while the element is in view and still typing — otherwise off-screen headings show a lone
+   blinking bar above empty space.
+
+## Text animation
+
+Two components, used everywhere. Do not hand-roll a third.
+
+- `Typewriter` — display headings. `<Typewriter as="h1" text="..." speed={80} delay={300} className="block …" />`
+  Give it plain text, not children, and always include `block` in the class list. Under reduced motion it
+  renders the text directly with no wrapper.
+- `Reveal` — everything else: body copy, metadata, eyebrows, list rows, form fields. Takes `as`, `delay`, `y`.
+
+Rough speeds in use: `95` for the masthead, `70–80` for page and collection titles, `14–18` for long display
+paragraphs (a slow per-character speed on a long string still takes seconds).
 
 ## Content model
 

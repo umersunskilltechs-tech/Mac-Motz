@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { AnimatePresence } from 'motion/react'
 import { collections, framesByCollection } from '../data'
 import Eyebrow from '../components/Eyebrow'
+import Reveal from '../components/Reveal'
 import CollectionBlock from '../components/CollectionBlock'
 import Lightbox from '../components/Lightbox'
 import Footer from '../components/Footer'
@@ -39,11 +40,11 @@ export default function Series() {
 
   return (
     <>
-      <div className="px-5 pt-32 pb-4 md:px-10 md:pt-40">
+      <Reveal className="px-5 pt-32 pb-4 md:px-10 md:pt-40">
         <Link to="/portfolio" className="font-mono text-[10px] uppercase tracking-[.2em] text-sub hover:text-accent">
           &larr; All collections
         </Link>
-      </div>
+      </Reveal>
 
       <CollectionBlock
         collection={collection}

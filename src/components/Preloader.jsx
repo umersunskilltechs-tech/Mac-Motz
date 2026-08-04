@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'motion/react'
+import Typewriter from './Typewriter'
 
 const DURATION_MS = 1250
 const DELAY_MS = 180
@@ -78,24 +79,22 @@ export default function Preloader() {
           className="w-full"
         >
           <div>
-            <motion.p
-              initial={{ y: '110%' }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.85, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-[19vw] leading-none tracking-[-.065em] md:text-[15vw]"
-            >
-              MAC
-            </motion.p>
+            <Typewriter
+              as="p"
+              text="MAC"
+              speed={110}
+              delay={140}
+              className="block font-display text-[19vw] leading-none tracking-[-.065em] md:text-[15vw]"
+            />
           </div>
-          <div className="text-right">
-            <motion.p
-              initial={{ y: '110%' }}
-              animate={{ y: 0 }}
-              transition={{ duration: 0.85, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-[19vw] leading-none tracking-[-.065em] text-accent md:text-[15vw]"
-            >
-              MOTZ
-            </motion.p>
+          <div className="flex justify-end">
+            <Typewriter
+              as="p"
+              text="MOTZ"
+              speed={110}
+              delay={520}
+              className="block font-display text-[19vw] leading-none tracking-[-.065em] text-accent md:text-[15vw]"
+            />
           </div>
         </motion.div>
       </div>

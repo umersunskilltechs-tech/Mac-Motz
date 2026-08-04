@@ -1,18 +1,26 @@
 import { Link } from 'react-router-dom'
 import Eyebrow from './Eyebrow'
+import Typewriter from './Typewriter'
+import Reveal from './Reveal'
 
 export default function Footer() {
   return (
     <section className="border-t border-ink/15 px-5 py-24 md:px-10 md:py-32">
-      <Eyebrow>Inquiries</Eyebrow>
+      <Reveal>
+        <Eyebrow>Inquiries</Eyebrow>
+      </Reveal>
+
       <Link
         to="/contact"
         className="mt-6 block font-display text-[13vw] leading-[.86] tracking-[-.05em] transition-colors hover:text-accent md:text-[9vw]"
       >
-        Start a conversation <span className="text-accent">&rarr;</span>
+        <Typewriter text="Start a conversation →" speed={55} delay={200} className="block" />
       </Link>
 
-      <footer className="mt-24 grid gap-8 border-t border-ink/15 pt-6 font-mono text-[10px] uppercase tracking-[.18em] text-sub md:grid-cols-4">
+      <Reveal
+        as="footer"
+        className="mt-24 grid gap-8 border-t border-ink/15 pt-6 font-mono text-[10px] uppercase tracking-[.18em] text-sub md:grid-cols-4"
+      >
         <p className="text-ink">
           Passing through
           <br />
@@ -38,7 +46,7 @@ export default function Footer() {
           <br />
           All rights reserved
         </p>
-      </footer>
+      </Reveal>
     </section>
   )
 }
