@@ -29,6 +29,8 @@ export default function GrainField() {
       }))
     }
 
+    let seededWidth = 0
+
     function resize() {
       const ratio = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = window.innerWidth * ratio
@@ -36,7 +38,13 @@ export default function GrainField() {
       canvas.style.width = `${window.innerWidth}px`
       canvas.style.height = `${window.innerHeight}px`
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0)
-      seed()
+      // Mobile browsers fire resize every time the address bar hides. Re-seeding
+      // on those would visibly jolt the whole field, so only reseed on a real
+      // width change (rotation, desktop window drag).
+      if (Math.abs(window.innerWidth - seededWidth) > 80) {
+        seededWidth = window.innerWidth
+        seed()
+      }
       if (reduce) draw(0)
     }
 

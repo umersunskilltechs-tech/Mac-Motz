@@ -52,6 +52,7 @@ export default function Series() {
         total={collections.length}
         next={null}
         onOpen={setOpenId}
+        standalone
       />
 
       <nav className="grid gap-px border-t border-ink/15 bg-ink/15 md:grid-cols-2">

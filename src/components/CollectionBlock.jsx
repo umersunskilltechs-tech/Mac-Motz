@@ -7,7 +7,11 @@ import { easeOut } from '../motion'
 // The single section this whole site is built from. The homepage stacks one of
 // these per collection; the series page renders exactly one. Nothing else on the
 // page competes with it.
-export default function CollectionBlock({ collection, frames, position, total, next, onOpen }) {
+export default function CollectionBlock({ collection, frames, position, total, next, onOpen, standalone = false }) {
+  // On the series page this block is the whole page, so its title carries the
+  // document heading and the link to itself is dropped.
+  const Title = standalone ? 'h1' : 'h2'
+
   return (
     <section
       id={collection.id}
@@ -25,22 +29,24 @@ export default function CollectionBlock({ collection, frames, position, total, n
           <p className="font-display text-6xl leading-none tracking-[-.05em] text-accent md:text-7xl">
             {collection.number}
           </p>
-          <h2
+          <Title
             id={`${collection.id}-title`}
             className="mt-4 font-display text-4xl leading-[1.02] tracking-[-.035em] md:text-5xl"
           >
             {collection.title}
-          </h2>
+          </Title>
           <p className="mt-3 font-mono text-[10px] uppercase tracking-[.2em] text-sub">
             {collection.year} &middot; {collection.location} &middot; {frames.length} frames
           </p>
           <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-ink/75">{collection.description}</p>
-          <Link
-            to={`/portfolio/${collection.id}`}
-            className="mt-8 inline-block border-b border-accent pb-1 font-mono text-[10px] uppercase tracking-[.2em] text-accent transition hover:border-ink hover:text-ink"
-          >
-            View collection &rarr;
-          </Link>
+          {!standalone && (
+            <Link
+              to={`/portfolio/${collection.id}`}
+              className="mt-8 inline-block border-b border-accent pb-1 font-mono text-[10px] uppercase tracking-[.2em] text-accent transition hover:border-ink hover:text-ink"
+            >
+              View collection &rarr;
+            </Link>
+          )}
         </motion.div>
 
         <div className="space-y-12 md:col-span-8">

@@ -1,72 +1,75 @@
 # Mac Motz
 
 Photography portfolio for Mac Motz (macmotz.com) — a fine-art/documentary photographer working on long-form
-collections about place, travel, vacancy, landscape, coastline, and family. React + Vite + Tailwind CSS + Motion
-for React + React Router.
+collections about place, travel, vacancy, landscape, coastline, and family.
 
-## Routes
+React + Vite + Tailwind CSS v4 + Motion for React + React Router.
 
-- `/` — Home: image-first intro, all six collections in a vertical editorial sequence, hover/focus archive index
-- `/portfolio` — dense contact-sheet gallery of every frame, filterable by collection, with a lightbox
-- `/portfolio/:series` — a single collection's editorial page and grid (`:series` is the collection id, e.g. `kin`)
-- `/about` — editorial biography, statement, exhibitions/press placeholders, direct email
-- `/contact` — inquiry form (name, email, project type, message) with client-side validation
-
-There is no e-commerce, pricing, or package selection anywhere on the site — visitors browse collections and send
-inquiries for custom quotes.
+> Working on this codebase? Read [AGENTS.md](AGENTS.md) first — it documents the architecture, the invariants
+> that fail silently, and exactly how to add collections and real photographs.
 
 ## Run locally
 
 ```bash
 npm install
-npm run dev
+npm run dev       # http://localhost:5173
+npm run build     # production build in dist/
+npm run preview
 ```
 
-`npm run build` produces a production build in `dist/`; `npm run preview` serves that build locally.
+## Routes
 
-## Project structure
+- `/` — Home. The masthead, a numbered archive index, then every collection in full as one repeating block.
+- `/portfolio` — every frame as a single contact sheet, filterable by collection, with a lightbox.
+- `/portfolio/:series` — one collection on its own page (`:series` is the collection id, e.g. `kin`).
+- `/about` — biography, statement, exhibitions and press.
+- `/contact` — inquiry form.
+
+There is no e-commerce, pricing, or package selection anywhere on the site — visitors browse collections and
+send inquiries for custom quotes.
+
+## Structure
 
 ```
 src/
-  data.js              collection + frame data (see below)
-  motion.js            shared Motion variants/easing
-  App.jsx              routes + app shell (header, preloader)
-  components/          Header, Footer, Preloader, Lightbox, FrameGrid,
-                        CollectionRow, CollectionIndex, Eyebrow
-  pages/               Home, Portfolio, Series, About, Contact
+  data.js         all collection + frame content (single source of truth)
+  motion.js       shared easing and fade variants
+  App.jsx         routes and app shell
+  styles.css      theme tokens, background layers, cursor rules
+  components/     CollectionBlock, LeadSlider, ContactSheet, IndexList, Masthead,
+                  Lightbox, GrainField, Cursor, Preloader, Header, Footer, Eyebrow
+  pages/          Home, Portfolio, Series, About, Contact
+public/images/    real photography goes here
 ```
 
-## Replacing photographs
+The homepage is one section repeated: `CollectionBlock` renders once per collection and is the only content
+section on the page. `Series` reuses the same component for a single collection.
 
-All images are placeholders from `picsum.photos`, defined in `src/data.js`. Each collection has a `cover` image
-and a `frames` array; each frame has an `alt` description and (via `allFrames`) a generated `src`. To swap in real
-photography:
+## Replacing the photographs
 
-1. Replace `cover` on each collection with the real hero image URL/path.
-2. Replace each frame's placeholder `src` (or add a `src` field per frame instead of relying on the generated
-   picsum URL) with the real image.
-3. Keep the `alt` text meaningful and specific — it's used for accessibility and appears under the lightbox image.
-
-Collections currently defined: Interstate, Low Country, Vacancy, Kin, Static, Coastline — each with 8 frames.
+All images are currently placeholders from `picsum.photos`, generated in `src/data.js`. To swap in real work,
+put files in `public/images/<collection-id>/`, give each frame an explicit `src`, and change `allFrames` to use
+it. Step-by-step in [AGENTS.md](AGENTS.md).
 
 ## Motion & accessibility
 
-- Preloader is capped at ~900ms and never waits on image/network loads.
-- All animation respects `prefers-reduced-motion` (see `src/styles.css` and `useReducedMotion()` usage throughout).
+- The preloader runs on a fixed ~1.6s timer and never waits on image or network loads.
+- All animation respects `prefers-reduced-motion` — the drifting background renders one static frame, the custom
+  cursor does not mount, and the lead slideshows stop auto-advancing.
 - The lightbox is a proper dialog (`role="dialog"`, `aria-modal`), supports Escape / Arrow Left / Arrow Right,
-  shows a visible close button and a frame counter, and traps body scroll while open.
+  shows a close button and a frame counter, and restores body scroll on close.
+- The custom cursor only appears for precise pointers; text inputs keep their caret.
 - No autoplay video, no scroll-jacking, no wheel-captured carousels — normal page scroll always works.
 
 ## Contact form
 
-The contact form validates client-side and shows a success state, but it does not send anything yet. Before
-launch, wire the form (`src/pages/Contact.jsx`) to a real endpoint — Formspree, Basin, or a custom API route.
+The form validates client-side and shows a success state, but it does not send anything yet. Before launch, wire
+it (`src/pages/Contact.jsx`) to a real endpoint — Formspree, Basin, or a custom API route.
 
 ## VPS deployment (Nginx)
 
-This app uses real React Router browser routes (`/portfolio`, `/portfolio/:series`, etc.), so the server must fall
-back to `index.html` for unknown paths or direct refreshes on those routes will 404. See
-[nginx.conf.example](nginx.conf.example):
+This app uses real React Router browser routes, so the server must fall back to `index.html` or direct refreshes
+on those routes will 404. See [nginx.conf.example](nginx.conf.example):
 
 ```nginx
 location / {

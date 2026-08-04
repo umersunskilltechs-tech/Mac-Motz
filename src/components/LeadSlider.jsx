@@ -29,9 +29,10 @@ export default function LeadSlider({ frames, onOpen }) {
     >
       <button
         type="button"
+        data-cursor="view"
         onClick={() => onOpen(active.id)}
         aria-label={`Open ${active.alt} at full size`}
-        className="relative block aspect-[4/5] w-full overflow-hidden bg-ink/5 md:aspect-[5/4]"
+        className="relative block aspect-4/5 w-full overflow-hidden bg-ink/5 md:aspect-5/4"
       >
         <AnimatePresence initial={false}>
           <motion.img

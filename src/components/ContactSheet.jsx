@@ -15,10 +15,11 @@ export default function ContactSheet({ frames, onOpen, columns = 'grid-cols-2 md
         >
           <button
             type="button"
+            data-cursor="view"
             onClick={() => onOpen(frame.id)}
             className="group block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            <div className="relative aspect-[4/5] w-full overflow-hidden bg-ink/5">
+            <div className="relative aspect-4/5 w-full overflow-hidden bg-ink/5">
               <img
                 src={frame.src}
                 alt={frame.alt}

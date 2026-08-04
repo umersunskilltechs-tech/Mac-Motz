@@ -53,7 +53,7 @@ export default function Preloader() {
 
   return (
     <motion.div
-      className="fixed inset-0 z-100 overflow-hidden bg-ink text-paper"
+      className="fixed inset-0 z-100 overflow-hidden bg-page text-ink"
       initial={false}
       animate={{ clipPath: complete ? 'inset(0 0 100% 0)' : 'inset(0 0 0% 0)' }}
       transition={{ duration: complete ? 0.8 : 0, ease: [0.76, 0, 0.24, 1] }}
@@ -65,7 +65,7 @@ export default function Preloader() {
       aria-live="polite"
       aria-label={`Loading ${progress} percent`}
     >
-      <div className="absolute inset-x-5 top-5 flex items-center justify-between font-mono text-[9px] uppercase tracking-[.22em] text-muted md:inset-x-10 md:top-8">
+      <div className="absolute inset-x-5 top-5 flex items-center justify-between font-mono text-[9px] uppercase tracking-[.22em] text-sub md:inset-x-10 md:top-8">
         <span>Photography / Portfolio</span>
         <span>Est. 2026</span>
       </div>
@@ -102,10 +102,10 @@ export default function Preloader() {
 
       <div className="absolute inset-x-5 bottom-6 md:inset-x-10 md:bottom-9">
         <div className="mb-3 flex items-end justify-between font-mono uppercase tracking-[.18em]">
-          <span className="text-[9px] text-muted">Loading visual archive</span>
-          <span className="text-2xl tabular-nums text-paper md:text-3xl">{String(progress).padStart(3, '0')}</span>
+          <span className="text-[9px] text-sub">Loading visual archive</span>
+          <span className="text-2xl tabular-nums text-ink md:text-3xl">{String(progress).padStart(3, '0')}</span>
         </div>
-        <div className="h-px overflow-hidden bg-paper/20">
+        <div className="h-px overflow-hidden bg-ink/15">
           <motion.div
             className="h-full origin-left bg-accent"
             animate={{ scaleX: progress / 100 }}
