@@ -49,24 +49,6 @@ export default function Masthead({ collections, frameCount }) {
           </a>
         </Reveal>
       </div>
-
-      {/* The fixed archive rail is desktop-only, so small screens get the same
-          jump-links inline instead. */}
-      <Reveal delay={0.3} className="mt-12 lg:hidden">
-        <p className="font-mono text-[9px] uppercase tracking-[.22em] text-sub">Archive</p>
-        <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-          {collections.map((collection) => (
-            <li key={collection.id}>
-              <a
-                href={`#${collection.id}`}
-                className="font-mono text-[10px] uppercase tracking-[.16em] text-sub transition hover:text-accent"
-              >
-                <span className="text-accent">{collection.number}</span> {collection.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Reveal>
     </header>
   )
 }

@@ -32,8 +32,9 @@ field notes, scroll hero). It was rebuilt specifically to remove them.
 Masthead  ->  CollectionBlock x N  ->  about strip  ->  Footer
 ```
 
-`ArchiveRail` floats over that, fixed to the right edge — the numbered index, collapsed to numbers and
-expanding on hover, tracking whichever block is crossing the middle of the viewport. It is not part of the flow.
+`ArchiveRail` floats over that, fixed to the right edge at **every** breakpoint — the numbered index, collapsed
+to numbers, expanding to titles on hover (desktop only; there's no hover on touch), tracking whichever block is
+crossing the middle of the viewport. It is not part of the page flow, and it is Home-only.
 
 ## Architecture
 
@@ -47,11 +48,11 @@ src/
     CollectionBlock.jsx    THE repeated section (sticky title col + LeadSlider + ContactSheet + meta strip)
     LeadSlider.jsx         auto-crossfading lead slideshow inside a block
     ContactSheet.jsx       captioned grid of every frame in a collection
-    ArchiveRail.jsx        fixed right-edge index with scroll-spy; desktop only
+    ArchiveRail.jsx        fixed right-edge index with scroll-spy, all breakpoints, flush right on mobile
     Masthead.jsx           homepage title block
     Typewriter.jsx         types a heading out when it scrolls into view
     Reveal.jsx             fades body copy and metadata up on scroll
-    Lightbox.jsx           full-screen viewer, keyboard + counter + scroll lock
+    Lightbox.jsx           full-screen viewer: drag/swipe + arrows + keyboard, counter, scroll lock
     GrainField.jsx         fixed canvas of drifting dust motes
     Cursor.jsx             camera-viewfinder cursor (corner brackets + centre mark)
     Preloader.jsx          intro curtain. Timing is fixed; see below.
@@ -112,6 +113,16 @@ Break any of these and the site degrades silently — no error, no failed build.
    overlays the typed characters absolutely. Without that, every heading reflows the page as it grows. The caret
    only renders while the element is in view and still typing — otherwise off-screen headings show a lone
    blinking bar above empty space.
+
+9. **`ArchiveRail` is `position: fixed` at every breakpoint, so it stays on screen through the whole scroll.**
+   Every section on `Home` needs a matching right-side reserve — see the `pr-12 sm:pr-14 lg:pr-24` wrapper in
+   `Home.jsx`. Widen the rail without widening that reserve and it silently covers the last column of every
+   `ContactSheet` again. This never shows as horizontal overflow (the rail doesn't grow `scrollWidth`, it just
+   sits on top of content already in the viewport) — verify with `railLeft - gridRight > 0`, not a scroll check.
+
+10. **Never give an absolutely-positioned element both `left` and `right` with no explicit width** — it stretches
+    to fill the gap. A leftover `md:right-6` on `Lightbox`'s left-positioned prev-button once expanded it to
+    cover almost the whole photo, silently eating clicks with no visible symptom.
 
 ## Text animation
 
@@ -181,8 +192,9 @@ chrome --headless=new --disable-gpu --remote-debugging-port=9222 --user-data-dir
 **Do not use `--virtual-time-budget`.** It freezes `setTimeout` while letting `requestAnimationFrame` run, so the
 preloader never completes and every screenshot is stuck on the intro curtain.
 
-Worth checking after layout changes: no horizontal overflow at 390px, no broken images, the preloader is gone,
-lightbox opens/closes and restores body scroll.
+Worth checking after layout changes: no horizontal overflow at 390px, no broken images, preloader gone, lightbox
+opens/closes and restores body scroll, and (if you touched `Home.jsx`/`ArchiveRail`) `railLeft - gridRight > 0`
+at 1024/1280/1440px.
 
 ## Deployment
 

@@ -56,7 +56,7 @@ export default function Series() {
         standalone
       />
 
-      <nav className="grid gap-px border-t border-ink/15 bg-ink/15 md:grid-cols-2">
+      <nav className="grid gap-px border-t border-ink/15 bg-ink/15 grid-cols-2">
         <Link to={`/portfolio/${previous.id}`} className="group bg-page px-5 py-12 md:px-10">
           <span className="font-mono text-[10px] uppercase tracking-[.2em] text-sub">&larr; Previous</span>
           <span className="mt-3 block font-display text-3xl tracking-[-.03em] transition group-hover:text-accent md:text-4xl">

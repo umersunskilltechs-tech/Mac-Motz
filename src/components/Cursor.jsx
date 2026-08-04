@@ -3,10 +3,10 @@ import { motion, useMotionValue, useSpring } from 'motion/react'
 
 const SPRING = { stiffness: 380, damping: 32, mass: 0.5 }
 
-// Only photographs get a centre label. Over links the label would land on top
-// of the link's own text and both become unreadable, so the centre mark simply
-// grows instead.
-const VIEW_LABEL = 'View'
+// Only photographs and the draggable lightbox image get a centre label. Over
+// links the label would land on top of the link's own text and both become
+// unreadable, so the centre mark simply grows instead.
+const LABELS = { view: 'View', drag: 'Drag ↔' }
 
 // Camera-viewfinder cursor: a focus box of four corner brackets that trails the
 // pointer, with a centre mark that becomes a label over anything interactive —
@@ -40,6 +40,7 @@ export default function Cursor() {
     const onOver = (event) => {
       const target = event.target
       if (target.closest?.('input, textarea, select')) setMode('text')
+      else if (target.closest?.('[data-cursor="drag"]')) setMode('drag')
       else if (target.closest?.('[data-cursor="view"]')) setMode('view')
       else if (target.closest?.('a, button, [role="button"]')) setMode('link')
       else setMode('default')
@@ -71,8 +72,8 @@ export default function Cursor() {
   if (!enabled) return null
 
   const showCursor = visible && mode !== 'text'
-  const label = mode === 'view' ? VIEW_LABEL : null
-  const baseScale = mode === 'view' ? 1.9 : mode === 'link' ? 1.4 : 1
+  const label = LABELS[mode] ?? null
+  const baseScale = mode === 'view' ? 1.9 : mode === 'drag' ? 2.1 : mode === 'link' ? 1.4 : 1
   const boxScale = pressed ? baseScale * 1.22 : baseScale
   // Kept modest and round: a large filled mark sitting on a text link reads as
   // a redaction block rather than a cursor.
@@ -112,7 +113,7 @@ export default function Cursor() {
           transition={{ duration: 0.2 }}
           className={`absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-[.24em] ${textClass}`}
         >
-          {VIEW_LABEL}
+          {label ?? LABELS.view}
         </motion.span>
       </motion.div>
 

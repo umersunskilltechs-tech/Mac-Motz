@@ -22,8 +22,9 @@ content section on the homepage. Order is fixed:
 Masthead -> CollectionBlock x N -> about strip -> Footer
 ```
 
-`ArchiveRail` floats over that, fixed to the right edge: the numbered index, collapsed to numbers, expanding on
-hover, tracking the block crossing the middle of the viewport. It is not part of the page flow.
+`ArchiveRail` floats over that, fixed to the right edge at every breakpoint (flush right on mobile, inset on
+lg+): the numbered index, collapsed to numbers, expanding to titles on hover (desktop only), tracking the block
+crossing the middle of the viewport. It is not part of the page flow, and it is Home-only.
 
 This site was rebuilt specifically to delete a pile of one-off homepage sections (marquee, stats band, tabs,
 coverflow, field notes, scroll hero). **Do not add new homepage section types.** New ideas go inside
@@ -46,6 +47,11 @@ ulyssesdesanti.com (four nav items, email as nav), anthonytuccitto.com (restrain
 6. **No scroll-jacking.** No wheel capture, no pinning.
 7. **`Typewriter` keeps the full string in the DOM** (invisible, for layout) and overlays the typed characters.
    Remove that and every heading reflows the page as it types. Its caret renders only while in view and typing.
+8. **`ArchiveRail` is fixed, so every `Home` section needs a matching right-side reserve** (`Home.jsx`'s
+   `pr-12 sm:pr-14 lg:pr-24` wrapper) or it silently sits on top of the last grid column — no scroll overflow,
+   because it doesn't grow `scrollWidth`. Check `railLeft - gridRight > 0`, not a scrollbar.
+9. **Absolutely-positioned elements need an explicit width if both `left` and `right` are set** — otherwise they
+   stretch to fill the gap and silently eat clicks meant for whatever's underneath.
 
 ## Text animation
 

@@ -8,6 +8,8 @@ const links = [
   { to: '/contact', label: 'Contact' },
 ]
 
+const mobileLinks = [...links, { to: 'mailto:hello@macmotz.com', label: 'hello@macmotz.com', external: true }]
+
 export default function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -45,12 +47,12 @@ export default function Header() {
         </nav>
         <button
           type="button"
-          className="font-mono text-[10px] uppercase tracking-[.18em] md:hidden"
+          className={`font-mono text-[10px] uppercase tracking-[.18em] md:hidden ${open ? 'invisible' : ''}`}
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-nav"
         >
-          {open ? 'Close' : 'Menu'}
+          Menu
         </button>
       </header>
 
@@ -62,24 +64,43 @@ export default function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-40 grid place-content-center gap-8 bg-page text-center"
+            className="fixed inset-0 z-60 grid place-content-center bg-page px-5"
           >
-            {links.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setOpen(false)}
-                className="font-display text-5xl tracking-[-.03em] hover:text-accent"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <a
-              href="mailto:hello@macmotz.com"
-              className="font-mono text-[10px] uppercase tracking-[.2em] text-sub"
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+              className="absolute right-5 top-5 font-mono text-[10px] uppercase tracking-[.18em]"
             >
-              hello@macmotz.com
-            </a>
+              Close
+            </button>
+            <div className="flex w-[min(80vw,280px)] flex-col gap-8">
+              {mobileLinks.map((link) =>
+                link.external ? (
+                  <a
+                    key={link.to}
+                    href={link.to}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center text-center transition-colors hover:text-accent"
+                  >
+                    <span className="font-display text-[1.15rem] leading-none tracking-[-.02em]">{link.label}</span>
+                  </a>
+                ) : (
+                  <NavLink
+                    key={link.to}
+                    to={link.to}
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      `flex items-center justify-center transition-colors hover:text-accent ${
+                        isActive ? 'text-accent' : ''
+                      }`
+                    }
+                  >
+                    <span className="font-display text-[1.6rem] leading-none tracking-[-.02em]">{link.label}</span>
+                  </NavLink>
+                ),
+              )}
+            </div>
           </motion.nav>
         )}
       </AnimatePresence>

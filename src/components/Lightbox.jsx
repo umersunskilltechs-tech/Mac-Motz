@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react'
+
+const SWIPE_DISTANCE = 90
+const SWIPE_VELOCITY = 500
 
 export default function Lightbox({ frames, startId, onClose }) {
   const [index, setIndex] = useState(() => Math.max(0, frames.findIndex((f) => f.id === startId)))
   const reduce = useReducedMotion()
   const closeRef = useRef(null)
   const active = frames[index]
+
+  // Shared across mounts so a swipe that changes `index` can hand the drag
+  // offset back to zero before the next image appears (see the effect below).
+  const dragX = useMotionValue(0)
+  const rotate = useTransform(dragX, [-220, 220], reduce ? [0, 0] : [-6, 6])
 
   useEffect(() => {
     closeRef.current?.focus()
@@ -26,10 +34,21 @@ export default function Lightbox({ frames, startId, onClose }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [frames.length, onClose])
 
+  // Runs after `index` changes but before the next image mounts (AnimatePresence
+  // is `mode="wait"`), so the incoming image always starts centred.
+  useEffect(() => {
+    dragX.jump(0)
+  }, [index, dragX])
+
   if (!active) return null
 
   const stop = (event) => event.stopPropagation()
   const go = (step) => setIndex((n) => (n + step + frames.length) % frames.length)
+
+  function onDragEnd(event, info) {
+    if (info.offset.x < -SWIPE_DISTANCE || info.velocity.x < -SWIPE_VELOCITY) go(1)
+    else if (info.offset.x > SWIPE_DISTANCE || info.velocity.x > SWIPE_VELOCITY) go(-1)
+  }
 
   return (
     <motion.div
@@ -72,11 +91,18 @@ export default function Lightbox({ frames, startId, onClose }) {
             key={active.id}
             src={active.src}
             alt={active.alt}
+            data-cursor="drag"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.65}
+            onDragEnd={onDragEnd}
+            whileDrag={{ scale: reduce ? 1 : 0.97 }}
+            style={{ x: dragX, rotate, touchAction: 'pan-y' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduce ? 0 : 0.3 }}
-            className="max-h-[74vh] max-w-full object-contain"
+            className="max-h-[74vh] max-w-full cursor-grab object-contain active:cursor-grabbing"
           />
         </AnimatePresence>
 
@@ -84,7 +110,7 @@ export default function Lightbox({ frames, startId, onClose }) {
           type="button"
           onClick={() => go(-1)}
           aria-label="Previous image"
-          className="absolute left-2 top-1/2 -translate-y-1/2 px-4 py-6 font-mono text-lg transition hover:text-accent md:left-6"
+          className="absolute left-2 top-1/2 z-10 -translate-y-1/2 px-4 py-6 font-mono text-lg transition hover:text-accent md:left-6"
         >
           &larr;
         </button>
@@ -92,7 +118,7 @@ export default function Lightbox({ frames, startId, onClose }) {
           type="button"
           onClick={() => go(1)}
           aria-label="Next image"
-          className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-6 font-mono text-lg transition hover:text-accent md:right-6"
+          className="absolute right-2 top-1/2 z-10 -translate-y-1/2 px-4 py-6 font-mono text-lg transition hover:text-accent md:right-6"
         >
           &rarr;
         </button>
