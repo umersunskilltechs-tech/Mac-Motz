@@ -63,8 +63,7 @@ export default function Contact() {
 
         <div className="mt-16 grid gap-12 border-t border-ink/15 pt-14 md:grid-cols-12 md:gap-8">
           <Reveal className="md:col-span-4 md:sticky md:top-28 md:self-start">
-            <p className="font-display text-5xl leading-none tracking-[-.05em] text-accent">01</p>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-[.2em] text-sub">Before you write</p>
+            <p className="font-display text-4xl leading-none tracking-[-.03em]">Get in touch</p>
             <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-ink/75">
               For commissions, exhibitions, licensing, and all other questions, use the form or email directly.
               No packages, no fixed pricing — every project is quoted to its brief.

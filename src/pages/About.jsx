@@ -1,7 +1,6 @@
 import Eyebrow from '../components/Eyebrow'
 import Typewriter from '../components/Typewriter'
 import Reveal from '../components/Reveal'
-import { collections } from '../data'
 import Footer from '../components/Footer'
 
 const exhibitions = [
@@ -53,56 +52,40 @@ export default function About() {
           </Reveal>
         </div>
 
-        <Reveal delay={0.1} className="mt-14">
-          <div className="grid h-[55vh] min-h-105 gap-3 md:grid-cols-[2fr_1fr]">
-            <div className="overflow-hidden">
-              <img
-                src={collections[3].cover}
-                alt="Portrait from the Kin collection"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="grid gap-3 overflow-hidden">
-              <div className="overflow-hidden">
-                <img
-                  src={collections[1].cover}
-                  alt="Landscape from the Low Country collection"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="overflow-hidden">
-                <img
-                  src={collections[4].cover}
-                  alt="Photograph from the Static collection"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
         <div className="mt-20">
-          <Chapter number="01" label="The practice">
-            <Typewriter
-              as="p"
-              text="A slow practice built around returning, noticing, and staying with a place."
-              speed={18}
-              className="block font-display text-3xl leading-[1.05] tracking-[-.04em] md:text-5xl"
-            />
-            <div className="mt-12 grid gap-10 text-lg leading-relaxed text-ink/75 md:grid-cols-2">
-              <Reveal>
-                <p>
-                  Mac Motz is a photographer interested in the quiet evidence of people moving through the world.
-                  The work begins with place and stays long enough to notice what is easily missed — a marsh at low
-                  tide, a motel room mid-way through being reclaimed, a family gathered at the end of the day.
-                </p>
-              </Reveal>
-              <Reveal delay={0.12}>
-                <p>
-                  Across landscapes, roadside interiors, and family archives, each long-form collection considers
-                  the distance between memory and the present moment. The photographs are made slowly, over years,
-                  in one place at a time.
-                </p>
+          <Chapter number="01" label="Profile">
+            <div className="grid gap-10 md:grid-cols-2">
+              <div>
+                <Typewriter
+                  as="p"
+                  text="A slow practice built around returning, noticing, and staying with a place."
+                  speed={18}
+                  className="block font-display text-3xl leading-[1.05] tracking-[-.04em] md:text-4xl"
+                />
+                <div className="mt-10 space-y-6 text-lg leading-relaxed text-ink/75">
+                  <Reveal>
+                    <p>
+                      Mac Motz is a photographer interested in the quiet evidence of people moving through the
+                      world. The work begins with place and stays long enough to notice what is easily missed — a
+                      marsh at low tide, a motel room mid-way through being reclaimed, a family gathered at the end
+                      of the day.
+                    </p>
+                  </Reveal>
+                  <Reveal delay={0.12}>
+                    <p>
+                      Across landscapes, roadside interiors, and family archives, each long-form collection
+                      considers the distance between memory and the present moment. The photographs are made
+                      slowly, over years, in one place at a time.
+                    </p>
+                  </Reveal>
+                </div>
+              </div>
+              <Reveal delay={0.1} className="h-[45vh] min-h-80 overflow-hidden md:h-full">
+                <img
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="Portrait of Mac Motz"
+                  className="h-full w-full object-cover"
+                />
               </Reveal>
             </div>
           </Chapter>

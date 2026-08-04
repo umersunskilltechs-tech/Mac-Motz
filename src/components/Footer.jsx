@@ -45,6 +45,11 @@ export default function Footer() {
           MM &copy; 2026
           <br />
           All rights reserved
+          <br />
+          Developed by{' '}
+          <a href="https://sunskilltech.com/" className="transition hover:text-accent">
+            Sun Skill Tech
+          </a>
         </p>
       </Reveal>
     </section>
