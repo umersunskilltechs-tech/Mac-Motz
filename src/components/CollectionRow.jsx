@@ -26,7 +26,7 @@ export default function CollectionRow({ item, index }) {
             src={item.cover}
             alt={`${item.title}, ${item.location}`}
             loading="lazy"
-            className="h-full w-full object-cover grayscale transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent" />
         </Link>

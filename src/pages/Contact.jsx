@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import Eyebrow from '../components/Eyebrow'
+import Footer from '../components/Footer'
 
 const projectTypes = ['Editorial commission', 'Documentary project', 'Print or licensing inquiry', 'Exhibition or press', 'Other']
 
@@ -36,22 +37,33 @@ export default function Contact() {
   }
 
   return (
+    <>
     <section className="px-5 pb-28 pt-36 md:px-10 md:pt-44">
-      <div className="grid gap-14 md:grid-cols-12">
-        <div className="md:col-span-4">
+      <div className="mb-16 max-w-5xl">
+        <Eyebrow>Contact / Commissions</Eyebrow>
+        <h1 className="mt-5 font-display text-[14vw] leading-[.82] tracking-[-.06em] md:text-[9vw]">Let&rsquo;s make something.</h1>
+      </div>
+
+      <div className="grid gap-0 overflow-hidden rounded-3xl border border-paper/15 bg-panel md:grid-cols-12">
+        <div className="border-b border-paper/15 p-7 md:col-span-4 md:border-b-0 md:border-r md:p-10">
           <Eyebrow>Inquiries &amp; collaborations</Eyebrow>
-          <h1 className="mt-5 font-display text-5xl leading-[.95] tracking-[-.05em] md:text-7xl">
+          <h2 className="mt-5 font-display text-4xl leading-[.95] tracking-[-.05em] md:text-5xl">
             Begin a conversation.
-          </h1>
+          </h2>
           <p className="mt-8 max-w-sm text-paper/70">
             For commissions, exhibitions, licensing, and all other questions, use the form or email directly.
           </p>
           <a href="mailto:hello@macmotz.com" className="mt-8 block font-mono text-[10px] uppercase tracking-[.15em] text-accent">
             hello@macmotz.com &#8599;
           </a>
+          <div className="mt-16 border-t border-paper/15 pt-6 font-mono text-[9px] uppercase leading-loose tracking-[.15em] text-muted">
+            <p>Based in the United States</p>
+            <p>Available worldwide</p>
+            <p className="mt-3 text-paper/75">Typical reply / 1&ndash;2 days</p>
+          </div>
         </div>
 
-        <div className="md:col-span-7 md:col-start-6">
+        <div className="p-7 md:col-span-8 md:p-10 lg:p-14">
           <AnimatePresence mode="wait">
             {sent ? (
               <motion.div
@@ -130,5 +142,24 @@ export default function Contact() {
         </div>
       </div>
     </section>
+    <section className="border-y border-paper/20 px-5 py-20 md:px-10 md:py-28">
+      <Eyebrow>How it works</Eyebrow>
+      <div className="mt-10 grid gap-px overflow-hidden rounded-2xl bg-paper/20 md:grid-cols-4">
+        {[
+          ['01', 'Brief', 'Share the assignment, audience, location, and timing.'],
+          ['02', 'Align', 'We shape the visual approach, scope, and production plan.'],
+          ['03', 'Create', 'The work is photographed with a quiet, observational process.'],
+          ['04', 'Deliver', 'Final selects arrive edited, organized, and ready for use.'],
+        ].map(([number, title, copy]) => (
+          <div key={number} className="bg-ink p-6 md:min-h-56 md:p-8">
+            <span className="font-mono text-[10px] text-accent">{number}</span>
+            <h2 className="mt-12 font-display text-3xl">{title}</h2>
+            <p className="mt-4 text-sm leading-relaxed text-paper/60">{copy}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+    <Footer />
+    </>
   )
 }

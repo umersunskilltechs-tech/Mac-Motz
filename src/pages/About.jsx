@@ -1,6 +1,9 @@
 import { motion, useReducedMotion } from 'motion/react'
 import Eyebrow from '../components/Eyebrow'
 import { fadeUp, transition } from '../motion'
+import { collections, totalFrameCount } from '../data'
+import StatsBand from '../components/StatsBand'
+import Footer from '../components/Footer'
 
 const exhibitions = [
   { year: '2025', title: 'Vacancy — solo exhibition, Tucson Center for Photography (placeholder)' },
@@ -17,8 +20,33 @@ export default function About() {
   const reduce = useReducedMotion()
 
   return (
+    <>
     <section className="px-5 pb-28 pt-36 md:px-10 md:pt-44">
-      <div className="grid gap-14 md:grid-cols-12">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        transition={transition}
+        className="grid items-end gap-10 md:grid-cols-12"
+      >
+        <div className="md:col-span-9">
+          <Eyebrow>Biography / Practice</Eyebrow>
+          <h1 className="mt-5 font-display text-[15vw] leading-[.78] tracking-[-.065em] md:text-[10vw]">Looking closely.</h1>
+        </div>
+        <p className="max-w-sm pb-2 text-lg leading-relaxed text-paper/65 md:col-span-3">
+          Documentary photography about place, memory, and the traces people leave behind.
+        </p>
+      </motion.div>
+
+      <div className="mt-16 grid h-[55vh] min-h-[420px] gap-3 md:grid-cols-[2fr_1fr]">
+        <div className="overflow-hidden rounded-sm"><img src={collections[3].cover} alt="Portrait from the Kin series" className="h-full w-full object-cover" /></div>
+        <div className="grid gap-3 overflow-hidden">
+          <div className="overflow-hidden rounded-sm"><img src={collections[1].cover} alt="Landscape from the Low Country series" className="h-full w-full object-cover" /></div>
+          <div className="overflow-hidden rounded-sm"><img src={collections[4].cover} alt="Photograph from the Static series" className="h-full w-full object-cover" /></div>
+        </div>
+      </div>
+
+      <div className="mt-24 grid gap-14 md:grid-cols-12">
         <div className="md:col-span-3">
           <Eyebrow>About Mac Motz</Eyebrow>
           <p className="mt-6 font-mono text-[10px] uppercase leading-loose tracking-[.15em] text-muted">
@@ -29,16 +57,7 @@ export default function About() {
         </div>
 
         <div className="md:col-span-8">
-          <motion.h1
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.4 }}
-            variants={fadeUp}
-            transition={transition}
-            className="font-display text-5xl leading-[.96] tracking-[-.05em] md:text-8xl"
-          >
-            Looking closely at what remains.
-          </motion.h1>
+          <p className="font-display text-4xl leading-[1.02] tracking-[-.04em] md:text-6xl">A slow practice built around returning, noticing, and staying with a place.</p>
 
           <motion.div
             initial={{ opacity: 0, y: reduce ? 0 : 24 }}
@@ -106,5 +125,8 @@ export default function About() {
         </div>
       </div>
     </section>
+    <StatsBand collections={collections} totalFrames={totalFrameCount} />
+    <Footer />
+    </>
   )
 }

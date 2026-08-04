@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
+import CoverflowCarousel from './CoverflowCarousel'
 
 export default function Lightbox({ frames, startId, onClose }) {
   const [index, setIndex] = useState(() => Math.max(0, frames.findIndex((f) => f.id === startId)))
@@ -59,41 +60,19 @@ export default function Lightbox({ frames, startId, onClose }) {
           ref={closeRef}
           type="button"
           onClick={onClose}
-          className="text-paper transition hover:text-accent"
+          aria-label="Close image viewer"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-paper/25 text-paper transition hover:border-paper hover:bg-paper hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          Close &times;
+          <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5">
+            <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+          </svg>
         </button>
       </div>
 
       <div className="relative flex flex-1 items-center justify-center px-3 pb-4" onClick={stop}>
-        <button
-          type="button"
-          onClick={previous}
-          aria-label="Previous image"
-          className="absolute left-1 top-1/2 z-10 -translate-y-1/2 p-3 text-2xl text-paper/70 transition hover:text-accent md:left-4"
-        >
-          &larr;
-        </button>
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={active.id}
-            initial={{ opacity: 0, scale: reduce ? 1 : 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: reduce ? 1 : 0.98 }}
-            transition={{ duration: reduce ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
-            src={active.src}
-            alt={active.alt}
-            className="max-h-[70vh] w-auto max-w-full object-contain"
-          />
-        </AnimatePresence>
-        <button
-          type="button"
-          onClick={next}
-          aria-label="Next image"
-          className="absolute right-1 top-1/2 z-10 -translate-y-1/2 p-3 text-2xl text-paper/70 transition hover:text-accent md:right-4"
-        >
-          &rarr;
-        </button>
+        <div className="h-[72vh] w-full">
+          <CoverflowCarousel frames={frames} activeIndex={index} onChange={setIndex} reduce={reduce} />
+        </div>
       </div>
 
       <p className="px-5 pb-6 text-center text-sm text-paper/70 md:px-10" onClick={stop}>

@@ -4,6 +4,8 @@ import { collections, allFrames, totalFrameCount } from '../data'
 import Eyebrow from '../components/Eyebrow'
 import FrameGrid from '../components/FrameGrid'
 import Lightbox from '../components/Lightbox'
+import StatsBand from '../components/StatsBand'
+import Footer from '../components/Footer'
 
 export default function Portfolio() {
   const [filter, setFilter] = useState('All')
@@ -15,6 +17,7 @@ export default function Portfolio() {
   )
 
   return (
+    <>
     <section className="px-5 pb-28 pt-36 md:px-10 md:pt-44">
       <Eyebrow>Full contact sheet / {totalFrameCount} frames</Eyebrow>
       <h1 className="mt-5 font-display text-[15vw] leading-[.82] tracking-[-.06em] md:text-[10vw]">All work.</h1>
@@ -46,5 +49,8 @@ export default function Portfolio() {
         {openId && <Lightbox frames={visible} startId={openId} onClose={() => setOpenId(null)} />}
       </AnimatePresence>
     </section>
+    <StatsBand collections={collections} totalFrames={totalFrameCount} />
+    <Footer />
+    </>
   )
 }

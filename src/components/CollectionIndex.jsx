@@ -32,7 +32,7 @@ export default function CollectionIndex({ collections }) {
               src={item.cover}
               alt=""
               aria-hidden="true"
-              className="absolute inset-0 h-full w-full object-cover grayscale"
+              className="absolute inset-0 h-full w-full object-cover"
             />
             <motion.div
               animate={{ x: active === index ? 14 : 0 }}

@@ -15,7 +15,7 @@ export default function FrameGrid({ frames, onOpen, showCollection = false }) {
             src={plate.src}
             alt={plate.alt}
             loading="lazy"
-            className="h-full w-full object-cover grayscale transition duration-500 group-hover:scale-105 group-hover:grayscale-0"
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
           />
           <span className="absolute left-3 top-3 font-mono text-[10px] text-paper drop-shadow">
             {plate.frame}
