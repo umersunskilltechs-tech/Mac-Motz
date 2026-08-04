@@ -47,7 +47,7 @@ export default function Footer() {
           All rights reserved
           <br />
           Developed by{' '}
-          <a href="https://sunskilltech.com/" className="transition hover:text-accent">
+          <a href="https://sunskilltech.com/" target="_blank" className="transition hover:text-accent">
             Sun Skill Tech
           </a>
         </p>
