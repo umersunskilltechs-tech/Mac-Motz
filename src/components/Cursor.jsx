@@ -3,13 +3,21 @@ import { motion, useMotionValue, useSpring } from 'motion/react'
 
 const SPRING = { stiffness: 380, damping: 32, mass: 0.5 }
 
+// Only photographs get a centre label. Over links the label would land on top
+// of the link's own text and both become unreadable, so the centre mark simply
+// grows instead.
+const VIEW_LABEL = 'View'
+
 // Camera-viewfinder cursor: a focus box of four corner brackets that trails the
-// pointer, plus a hard centre mark that tracks exactly. Rendered in difference
-// blend so it stays legible on the pale page and over dark photographs.
+// pointer, with a centre mark that becomes a label over anything interactive —
+// the centre is never empty. Normally drawn in difference blend so it stays
+// legible on the pale page and over dark photographs; on press it drops to
+// normal blend and fires in the accent orange, like a shutter.
 export default function Cursor() {
   const [enabled, setEnabled] = useState(false)
   const [visible, setVisible] = useState(false)
   const [mode, setMode] = useState('default')
+  const [pressed, setPressed] = useState(false)
 
   const x = useMotionValue(-100)
   const y = useMotionValue(-100)
@@ -37,14 +45,25 @@ export default function Cursor() {
       else setMode('default')
     }
 
-    const onLeave = () => setVisible(false)
+    const onDown = () => setPressed(true)
+    const onUp = () => setPressed(false)
+    const onLeave = () => {
+      setVisible(false)
+      setPressed(false)
+    }
 
     window.addEventListener('pointermove', onMove, { passive: true })
     window.addEventListener('pointerover', onOver, { passive: true })
+    window.addEventListener('pointerdown', onDown, { passive: true })
+    window.addEventListener('pointerup', onUp, { passive: true })
+    window.addEventListener('pointercancel', onUp, { passive: true })
     document.addEventListener('pointerleave', onLeave)
     return () => {
       window.removeEventListener('pointermove', onMove)
       window.removeEventListener('pointerover', onOver)
+      window.removeEventListener('pointerdown', onDown)
+      window.removeEventListener('pointerup', onUp)
+      window.removeEventListener('pointercancel', onUp)
       document.removeEventListener('pointerleave', onLeave)
     }
   }, [x, y])
@@ -52,41 +71,58 @@ export default function Cursor() {
   if (!enabled) return null
 
   const showCursor = visible && mode !== 'text'
-  const boxScale = mode === 'view' ? 1.9 : mode === 'link' ? 1.35 : 1
-  const corner = 'absolute h-2.5 w-2.5 border-white/80'
+  const label = mode === 'view' ? VIEW_LABEL : null
+  const baseScale = mode === 'view' ? 1.9 : mode === 'link' ? 1.4 : 1
+  const boxScale = pressed ? baseScale * 1.22 : baseScale
+  // Kept modest and round: a large filled mark sitting on a text link reads as
+  // a redaction block rather than a cursor.
+  const markScale = label ? 0 : pressed ? 2.2 : mode === 'link' ? 1.5 : 1
+
+  const strokeClass = pressed ? 'border-accent' : 'border-white/80'
+  const fillClass = pressed ? 'bg-accent' : 'bg-white'
+  const textClass = pressed ? 'text-accent' : 'text-white'
 
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-1000 mix-blend-difference"
-      style={{ opacity: showCursor ? 1 : 0, transition: 'opacity 200ms ease' }}
+      className="pointer-events-none fixed inset-0 z-1000"
+      style={{
+        opacity: showCursor ? 1 : 0,
+        // Difference blend guarantees contrast everywhere, but it also means a
+        // real colour is impossible — so the press state opts out of it.
+        mixBlendMode: pressed ? 'normal' : 'difference',
+        transition: 'opacity 200ms ease',
+      }}
     >
       <motion.div style={{ x: boxX, y: boxY }} className="absolute left-0 top-0 will-change-transform">
         <motion.div
           animate={{ scale: boxScale }}
-          transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ type: 'spring', stiffness: 520, damping: 26, mass: 0.5 }}
           className="relative h-10 w-10 -translate-x-1/2 -translate-y-1/2"
         >
-          <span className={`${corner} left-0 top-0 border-l border-t`} />
-          <span className={`${corner} right-0 top-0 border-r border-t`} />
-          <span className={`${corner} bottom-0 left-0 border-b border-l`} />
-          <span className={`${corner} bottom-0 right-0 border-b border-r`} />
+          <span className={`absolute left-0 top-0 h-2.5 w-2.5 border-l border-t ${strokeClass}`} />
+          <span className={`absolute right-0 top-0 h-2.5 w-2.5 border-r border-t ${strokeClass}`} />
+          <span className={`absolute bottom-0 left-0 h-2.5 w-2.5 border-b border-l ${strokeClass}`} />
+          <span className={`absolute bottom-0 right-0 h-2.5 w-2.5 border-b border-r ${strokeClass}`} />
         </motion.div>
 
+        {/* Label sits dead centre and stays unscaled so it never distorts. */}
         <motion.span
-          animate={{ opacity: mode === 'view' ? 1 : 0, y: mode === 'view' ? 0 : -4 }}
-          transition={{ duration: 0.22 }}
-          className="absolute left-0 top-7 -translate-x-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-[.28em] text-white"
+          animate={{ opacity: label ? 1 : 0, scale: label ? 1 : 0.7 }}
+          transition={{ duration: 0.2 }}
+          className={`absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-mono text-[7px] uppercase tracking-[.24em] ${textClass}`}
         >
-          View
+          {VIEW_LABEL}
         </motion.span>
       </motion.div>
 
+      {/* Centre mark tracks the pointer exactly. It steps aside only when the
+          label is occupying the same spot, so the centre is never blank. */}
       <motion.div style={{ x, y }} className="absolute left-0 top-0 will-change-transform">
         <motion.div
-          animate={{ scale: mode === 'default' ? 1 : 0 }}
-          transition={{ duration: 0.25 }}
-          className="h-1 w-1 -translate-x-1/2 -translate-y-1/2 bg-white"
+          animate={{ scale: markScale }}
+          transition={{ type: 'spring', stiffness: 520, damping: 24 }}
+          className={`h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${fillClass}`}
         />
       </motion.div>
     </div>
