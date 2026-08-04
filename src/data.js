@@ -135,4 +135,11 @@ export const allFrames = collections.flatMap((collection) =>
   })),
 )
 
+export const framesByCollection = Object.fromEntries(
+  collections.map((collection) => [
+    collection.id,
+    allFrames.filter((frame) => frame.collection.id === collection.id),
+  ]),
+)
+
 export const totalFrameCount = allFrames.length

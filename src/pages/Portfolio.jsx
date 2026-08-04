@@ -1,56 +1,60 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
-import { collections, allFrames, totalFrameCount } from '../data'
+import { allFrames, collections } from '../data'
 import Eyebrow from '../components/Eyebrow'
-import FrameGrid from '../components/FrameGrid'
+import ContactSheet from '../components/ContactSheet'
 import Lightbox from '../components/Lightbox'
-import StatsBand from '../components/StatsBand'
 import Footer from '../components/Footer'
 
 export default function Portfolio() {
-  const [filter, setFilter] = useState('All')
+  const [filter, setFilter] = useState('all')
   const [openId, setOpenId] = useState(null)
 
-  const visible = useMemo(
-    () => (filter === 'All' ? allFrames : allFrames.filter((frame) => frame.collection.title === filter)),
+  const frames = useMemo(
+    () => (filter === 'all' ? allFrames : allFrames.filter((frame) => frame.collection.id === filter)),
     [filter],
   )
 
   return (
     <>
-    <section className="px-5 pb-28 pt-36 md:px-10 md:pt-44">
-      <Eyebrow>Full contact sheet / {totalFrameCount} frames</Eyebrow>
-      <h1 className="mt-5 font-display text-[15vw] leading-[.82] tracking-[-.06em] md:text-[10vw]">All work.</h1>
-      <p className="mt-8 max-w-xl text-paper/70">
-        Filter by series, or select a frame to view it larger. Every collection is also available as its own
-        gallery.
-      </p>
-      <div
-        role="group"
-        aria-label="Filter by collection"
-        className="mt-14 flex flex-wrap gap-x-5 gap-y-3 border-y border-paper/20 py-4 font-mono text-[10px] uppercase tracking-[.14em]"
-      >
-        {['All', ...collections.map((c) => c.title)].map((label) => (
+      <section className="px-5 pt-32 pb-16 md:px-10 md:pt-44">
+        <Eyebrow>Portfolio</Eyebrow>
+        <h1 className="mt-5 font-display text-[14vw] leading-[.84] tracking-[-.06em] md:text-[9vw]">The archive</h1>
+        <p className="mt-8 max-w-xl text-[15px] leading-relaxed text-ink/70">
+          Every frame across every collection, as one contact sheet. Filter by collection, or open any frame to view
+          it full size.
+        </p>
+
+        <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 border-y border-ink/15 py-4 font-mono text-[10px] uppercase tracking-[.18em]">
           <button
-            key={label}
             type="button"
-            aria-pressed={filter === label}
-            onClick={() => setFilter(label)}
-            className={filter === label ? 'text-accent' : 'text-muted transition hover:text-paper'}
+            onClick={() => setFilter('all')}
+            className={`transition hover:text-accent ${filter === 'all' ? 'text-accent' : 'text-sub'}`}
           >
-            {label}
+            All ({allFrames.length})
           </button>
-        ))}
-      </div>
-      <div className="mt-12">
-        <FrameGrid frames={visible} onOpen={setOpenId} showCollection={filter === 'All'} />
-      </div>
+          {collections.map((collection) => (
+            <button
+              key={collection.id}
+              type="button"
+              onClick={() => setFilter(collection.id)}
+              className={`transition hover:text-accent ${filter === collection.id ? 'text-accent' : 'text-sub'}`}
+            >
+              {collection.title}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          <ContactSheet frames={frames} onOpen={setOpenId} columns="grid-cols-2 md:grid-cols-4 lg:grid-cols-5" />
+        </div>
+      </section>
+
+      <Footer />
+
       <AnimatePresence>
-        {openId && <Lightbox frames={visible} startId={openId} onClose={() => setOpenId(null)} />}
+        {openId && <Lightbox frames={frames} startId={openId} onClose={() => setOpenId(null)} />}
       </AnimatePresence>
-    </section>
-    <StatsBand collections={collections} totalFrames={totalFrameCount} />
-    <Footer />
     </>
   )
 }

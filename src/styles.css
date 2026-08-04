@@ -2,10 +2,14 @@
 @import "tailwindcss";
 
 @theme {
+  /* Dark tones are retained for the preloader curtain and the lightbox. */
   --color-ink: #12100d;
   --color-panel: #1b1815;
   --color-paper: #ede7da;
+  /* Light editorial ground used by the site itself. */
+  --color-page: #f4f2ec;
   --color-muted: #8f887a;
+  --color-sub: #6d6656;
   --color-accent: #b5451f;
   --font-display: "Fraunces", Georgia, serif;
   --font-mono: "DM Mono", monospace;
@@ -14,13 +18,15 @@
 
 html {
   scroll-behavior: smooth;
-  background: var(--color-ink);
+  background: var(--color-page);
 }
 
+/* The page colour lives on `html` only. Giving `body` (or the app wrapper) an
+   opaque background would paint over the negative z-index background layers. */
 body {
   margin: 0;
   font-family: var(--font-sans);
-  color: var(--color-paper);
+  color: var(--color-ink);
   overflow-x: hidden;
 }
 
@@ -28,15 +34,29 @@ body {
   box-sizing: border-box;
 }
 
-/* Subtle film-grain overlay, fixed so it never adds scroll height or blocks input. */
+/* Faint ruled dot grid so the page is never a flat white field. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, rgba(18, 16, 13, 0.16) 1px, transparent 0);
+  background-size: 34px 34px;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 78%);
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 78%);
+}
+
+/* Film-grain overlay, fixed so it never adds scroll height or blocks input. */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 999;
   pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: overlay;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
