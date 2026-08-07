@@ -12,7 +12,7 @@ export default function Footer() {
 
       <Link
         to="/contact"
-        className="mt-6 block font-display text-[13vw] leading-[.86] tracking-[-.05em] transition-colors hover:text-accent md:text-[9vw]"
+        className="mt-6 block font-display text-[13vw] leading-[.86] tracking-tighter transition-colors hover:text-accent md:text-[9vw]"
       >
         <Typewriter text="Start a conversation →" speed={55} delay={200} className="block" />
       </Link>

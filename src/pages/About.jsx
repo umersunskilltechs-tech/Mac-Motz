@@ -20,7 +20,7 @@ function Chapter({ number, label, children }) {
   return (
     <section className="grid gap-8 border-t border-ink/15 py-14 md:grid-cols-12 md:gap-8 md:py-20">
       <Reveal className="md:col-span-3 md:sticky md:top-28 md:self-start">
-        <p className="font-display text-5xl leading-none tracking-[-.05em] text-accent">{number}</p>
+        <p className="font-display text-5xl leading-none tracking-tighter text-accent">{number}</p>
         <p className="mt-3 font-mono text-[10px] uppercase tracking-[.2em] text-sub">{label}</p>
       </Reveal>
       <div className="md:col-span-8">{children}</div>

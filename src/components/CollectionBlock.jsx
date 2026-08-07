@@ -21,7 +21,7 @@ export default function CollectionBlock({ collection, frames, position, total, n
       <div className="grid gap-12 md:grid-cols-12 md:gap-8">
         <div className="min-w-0 md:col-span-4 md:sticky md:top-28 md:self-start">
           <Reveal y={26}>
-            <p className="font-display text-6xl leading-none tracking-[-.05em] text-accent md:text-7xl">
+            <p className="font-display text-6xl leading-none tracking-tighter text-accent md:text-7xl">
               {collection.number}
             </p>
           </Reveal>

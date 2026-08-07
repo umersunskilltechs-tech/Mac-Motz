@@ -6,7 +6,8 @@
   /* Light editorial ground used by the site itself. */
   --color-page: #f4f2ec;
   --color-sub: #6d6656;
-  --color-accent: #b5451f;
+  /* --color-accent: #b5451f; */
+  --color-accent: #6c825a;
   --font-display: "Fraunces", Georgia, serif;
   --font-mono: "DM Mono", monospace;
   --font-sans: "Instrument Sans", sans-serif;
