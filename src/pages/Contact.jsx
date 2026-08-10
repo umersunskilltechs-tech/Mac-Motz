@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { useForm, ValidationError } from '@formspree/react'
 import Eyebrow from '../components/Eyebrow'
 import Typewriter from '../components/Typewriter'
 import Reveal from '../components/Reveal'
@@ -17,7 +17,7 @@ const fieldClass =
   'mt-4 w-full border-b border-ink/25 bg-transparent py-3 text-lg text-ink outline-none transition focus:border-accent'
 
 // Fields are numbered to match the rest of the site's mono-metadata language.
-function Field({ number, id, label, type = 'text', required }) {
+function Field({ number, id, label, type = 'text', required, formState }) {
   return (
     <label htmlFor={id} className="block">
       <span className="flex items-baseline gap-3 font-mono text-[10px] uppercase tracking-[.16em] text-sub">
@@ -25,25 +25,19 @@ function Field({ number, id, label, type = 'text', required }) {
         {label}
       </span>
       <input id={id} name={id} type={type} required={required} className={fieldClass} />
+      <ValidationError
+        prefix={label}
+        field={id}
+        errors={formState.errors}
+        className="mt-2 font-mono text-[10px] uppercase tracking-[.14em] text-accent"
+      />
     </label>
   )
 }
 
 export default function Contact() {
-  const [sent, setSent] = useState(false)
-
-  function submit(event) {
-    event.preventDefault()
-    const form = event.currentTarget
-    if (!form.checkValidity()) {
-      form.reportValidity()
-      return
-    }
-    // Demo-only: no request is sent. Wire this up to a real endpoint
-    // (Formspree, Basin, or a custom API route) before launch.
-    setSent(true)
-    form.reset()
-  }
+  const [formState, handleSubmit, resetForm] = useForm('xgawalok')
+  const sent = formState.succeeded
 
   return (
     <>
@@ -105,7 +99,7 @@ export default function Contact() {
                   <p className="mt-5 font-display text-4xl">Thank you. Mac will be in touch soon.</p>
                   <button
                     type="button"
-                    onClick={() => setSent(false)}
+                    onClick={resetForm}
                     className="mt-10 font-mono text-[10px] uppercase tracking-[.15em] text-accent"
                   >
                     Send another message
@@ -117,15 +111,14 @@ export default function Contact() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4 }}
-                  onSubmit={submit}
-                  noValidate
+                  onSubmit={handleSubmit}
                   className="space-y-10"
                 >
                   <Reveal>
-                    <Field number="01" id="name" label="Name" required />
+                    <Field number="01" id="name" label="Name" required formState={formState} />
                   </Reveal>
                   <Reveal delay={0.06}>
-                    <Field number="02" id="email" label="Email" type="email" required />
+                    <Field number="02" id="email" label="Email" type="email" required formState={formState} />
                   </Reveal>
                   <Reveal delay={0.12}>
                     <label htmlFor="project-type" className="block">
@@ -143,6 +136,12 @@ export default function Contact() {
                           </option>
                         ))}
                       </select>
+                      <ValidationError
+                        prefix="Project type"
+                        field="project-type"
+                        errors={formState.errors}
+                        className="mt-2 font-mono text-[10px] uppercase tracking-[.14em] text-accent"
+                      />
                     </label>
                   </Reveal>
                   <Reveal delay={0.18}>
@@ -159,19 +158,23 @@ export default function Contact() {
                         rows="4"
                         className={`${fieldClass} resize-none`}
                       />
+                      <ValidationError
+                        prefix="Message"
+                        field="message"
+                        errors={formState.errors}
+                        className="mt-2 font-mono text-[10px] uppercase tracking-[.14em] text-accent"
+                      />
                     </label>
                   </Reveal>
                   <Reveal delay={0.24}>
                     <button
                       type="submit"
-                      className="group inline-flex items-center gap-5 border-b border-accent pb-2 font-mono text-[10px] uppercase tracking-[.17em] text-accent transition hover:border-ink hover:text-ink"
+                      disabled={formState.submitting}
+                      className="group inline-flex items-center gap-5 border-b border-accent pb-2 font-mono text-[10px] uppercase tracking-[.17em] text-accent transition hover:border-ink hover:text-ink disabled:opacity-50"
                     >
-                      Send inquiry <span className="text-xl transition group-hover:translate-x-2">&rarr;</span>
+                      {formState.submitting ? 'Sending…' : 'Send inquiry'}{' '}
+                      <span className="text-xl transition group-hover:translate-x-2">&rarr;</span>
                     </button>
-                    <p className="mt-8 font-mono text-[9px] uppercase tracking-[.12em] text-sub">
-                      Demo form: no message is sent yet. Connect a real endpoint (Formspree, Basin, or a custom
-                      API) before launch.
-                    </p>
                   </Reveal>
                 </motion.form>
               )}
