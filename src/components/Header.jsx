@@ -28,7 +28,7 @@ export default function Header() {
           scrolled ? 'border-b border-ink/12 bg-page/80 backdrop-blur-md' : 'bg-transparent'
         }`}
       >
-        <Link to="/" onClick={() => setOpen(false)} className="font-mono text-[11px] uppercase tracking-[.22em]">
+        <Link to="/" onClick={() => setOpen(false)} className="font-mono text-sm font-bold uppercase tracking-[.22em]">
           Mac Motz
         </Link>
         <nav className="hidden gap-8 font-mono text-[10px] uppercase tracking-[.18em] md:flex">

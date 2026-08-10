@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import Header from './components/Header'
 import Preloader from './components/Preloader'
-import GrainField from './components/GrainField'
+// import GrainField from './components/GrainField'
 import Cursor from './components/Cursor'
 import Home from './pages/Home'
 import Portfolio from './pages/Portfolio'
@@ -23,7 +23,7 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <main className="min-h-screen text-ink selection:bg-accent selection:text-page">
-        <GrainField />
+        {/* <GrainField /> */}
         <Cursor />
         <Preloader />
         <Header />
