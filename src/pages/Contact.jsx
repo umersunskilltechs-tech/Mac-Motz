@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useForm, ValidationError } from '@formspree/react'
 import Eyebrow from '../components/Eyebrow'
 import Typewriter from '../components/Typewriter'
 import Reveal from '../components/Reveal'
 import Footer from '../components/Footer'
+
+const FORMSUBMIT_EMAIL = 'umer.sunskilltechs@gmail.com'
 
 const projectTypes = [
   'Editorial commission',
@@ -17,7 +19,7 @@ const fieldClass =
   'mt-4 w-full border-b border-ink/25 bg-transparent py-3 text-lg text-ink outline-none transition focus:border-accent'
 
 // Fields are numbered to match the rest of the site's mono-metadata language.
-function Field({ number, id, label, type = 'text', required, formState }) {
+function Field({ number, id, label, type = 'text', required }) {
   return (
     <label htmlFor={id} className="block">
       <span className="flex items-baseline gap-3 font-mono text-[10px] uppercase tracking-[.16em] text-sub">
@@ -25,19 +27,35 @@ function Field({ number, id, label, type = 'text', required, formState }) {
         {label}
       </span>
       <input id={id} name={id} type={type} required={required} className={fieldClass} />
-      <ValidationError
-        prefix={label}
-        field={id}
-        errors={formState.errors}
-        className="mt-2 font-mono text-[10px] uppercase tracking-[.14em] text-accent"
-      />
     </label>
   )
 }
 
 export default function Contact() {
-  const [formState, handleSubmit, resetForm] = useForm('xgawalok')
-  const sent = formState.succeeded
+  const [status, setStatus] = useState('idle')
+  const sent = status === 'sent'
+
+  async function submit(event) {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (!form.checkValidity()) {
+      form.reportValidity()
+      return
+    }
+    setStatus('submitting')
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_EMAIL}`, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(form),
+      })
+      if (!response.ok) throw new Error('Submission failed')
+      setStatus('sent')
+      form.reset()
+    } catch {
+      setStatus('error')
+    }
+  }
 
   return (
     <>
@@ -99,7 +117,7 @@ export default function Contact() {
                   <p className="mt-5 font-display text-4xl">Thank you. Mac will be in touch soon.</p>
                   <button
                     type="button"
-                    onClick={resetForm}
+                    onClick={() => setStatus('idle')}
                     className="mt-10 font-mono text-[10px] uppercase tracking-[.15em] text-accent"
                   >
                     Send another message
@@ -111,14 +129,17 @@ export default function Contact() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4 }}
-                  onSubmit={handleSubmit}
+                  onSubmit={submit}
+                  noValidate
                   className="space-y-10"
                 >
+                  <input type="hidden" name="_subject" value="New inquiry from macmotz.com" />
+                  <input type="hidden" name="_template" value="table" />
                   <Reveal>
-                    <Field number="01" id="name" label="Name" required formState={formState} />
+                    <Field number="01" id="name" label="Name" required />
                   </Reveal>
                   <Reveal delay={0.06}>
-                    <Field number="02" id="email" label="Email" type="email" required formState={formState} />
+                    <Field number="02" id="email" label="Email" type="email" required />
                   </Reveal>
                   <Reveal delay={0.12}>
                     <label htmlFor="project-type" className="block">
@@ -136,12 +157,6 @@ export default function Contact() {
                           </option>
                         ))}
                       </select>
-                      <ValidationError
-                        prefix="Project type"
-                        field="project-type"
-                        errors={formState.errors}
-                        className="mt-2 font-mono text-[10px] uppercase tracking-[.14em] text-accent"
-                      />
                     </label>
                   </Reveal>
                   <Reveal delay={0.18}>
@@ -158,23 +173,22 @@ export default function Contact() {
                         rows="4"
                         className={`${fieldClass} resize-none`}
                       />
-                      <ValidationError
-                        prefix="Message"
-                        field="message"
-                        errors={formState.errors}
-                        className="mt-2 font-mono text-[10px] uppercase tracking-[.14em] text-accent"
-                      />
                     </label>
                   </Reveal>
                   <Reveal delay={0.24}>
                     <button
                       type="submit"
-                      disabled={formState.submitting}
+                      disabled={status === 'submitting'}
                       className="group inline-flex items-center gap-5 border-b border-accent pb-2 font-mono text-[10px] uppercase tracking-[.17em] text-accent transition hover:border-ink hover:text-ink disabled:opacity-50"
                     >
-                      {formState.submitting ? 'Sending…' : 'Send inquiry'}{' '}
+                      {status === 'submitting' ? 'Sending…' : 'Send inquiry'}{' '}
                       <span className="text-xl transition group-hover:translate-x-2">&rarr;</span>
                     </button>
+                    {status === 'error' && (
+                      <p className="mt-6 font-mono text-[10px] uppercase tracking-[.14em] text-accent">
+                        Something went wrong. Please try again or email hello@macmotz.com directly.
+                      </p>
+                    )}
                   </Reveal>
                 </motion.form>
               )}
